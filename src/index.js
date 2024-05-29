@@ -1,6 +1,7 @@
-import './styles.scss';
-import 'bootstrap';
+// import './styles.scss';
+// import 'bootstrap';
 
 const test = () => console.log('it worked!');
 
-export default test;
+module.exports = test;
+// export default test;
