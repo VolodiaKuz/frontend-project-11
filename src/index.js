@@ -3,5 +3,5 @@
 
 const test = () => console.log('it worked!');
 
-module.exports = test;
-// export default test;
+// module.exports = test;
+export default test;
