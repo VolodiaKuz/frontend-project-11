@@ -1,4 +1,6 @@
 import './styles.scss';
 import 'bootstrap';
 
-console.log('it worked!');
+const test = () => console.log('it worked!');
+
+export default test;
