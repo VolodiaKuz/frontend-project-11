@@ -1,10 +1,14 @@
 // import './styles.scss';
 // import 'bootstrap';
 
-// import * as yup from 'yup';
+import * as yup from 'yup';
+
+// const path = require('node:path');
+// const yup = require('../node_modules/yup');
+// import * as path from 'node:path';
 // import onChange from 'on-change';
 
-// import yup from '../node_modules/yup/index.js';
+// import { yup } from '../node_modules/yup/index.js';
 // import { onchange } from '../node_modules/onchange/dist/index.js';
 
 // const schema = yup.object().shape({
@@ -70,7 +74,6 @@ export default () => {
     const test = document.createElement('p');
     test.textContent = elements.input.value;
     test.classList.add('text-white')
-    // text-white
     elements.form.after(test)
     elements.form.append(test)
 
@@ -98,10 +101,6 @@ export default () => {
   // });
 
 }
-
-
-
-
 
 // module.exports = test;
 // export default test;
