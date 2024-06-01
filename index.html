@@ -65,8 +65,8 @@
                     <input
                       rss-form="input"
                       id="url-input"
-                      autofocus=""
-                      required=""
+                      autofocus
+                      required
                       name="url"
                       aria-label="url"
                       class="form-control w-100"
@@ -88,9 +88,10 @@
                 </div>
               </div>
             </form>
-            <p class="mt-2 mb-0 text-muted">
+            <p class="mt-2 mb-0 text-muted" id="url-example">
               Пример: https://lorem-rss.hexlet.app/feed
             </p>
+            <p class="feedback m-0 position-absolute small text-danger"></p>
             <!-- <p class="feedback m-0 position-absolute small text-danger">
               Ссылка должна быть валидным URL
             </p> -->

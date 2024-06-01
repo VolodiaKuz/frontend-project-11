@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "onchange": "^7.1.0",
+    "lodash": "^4.17.21",
+    "on-change": "^5.0.1",
     "yup": "^1.4.0"
   }
 }

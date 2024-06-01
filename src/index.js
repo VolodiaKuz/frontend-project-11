@@ -2,40 +2,29 @@
 // import 'bootstrap';
 
 import * as yup from 'yup';
+import onChange from 'on-change';
+import keyBy from 'lodash/keyBy.js';
+import isEmpty from 'lodash/isEmpty.js';
 
-// const path = require('node:path');
-// const yup = require('../node_modules/yup');
-// import * as path from 'node:path';
-// import onChange from 'on-change';
-
-// import { yup } from '../node_modules/yup/index.js';
-// import { onchange } from '../node_modules/onchange/dist/index.js';
-
-// const schema = yup.object().shape({
-//   input: yup.string().trim().required(),
-// });
-
-// const validate = (fields) => {
-//   try {
-//     schema.validateSync(fields, { abortEarly: false });
-//     return {};
-//   } catch (e) {
-//     return keyBy(e.inner, 'path');
-//   }
-// };
-
-// const watchedState = onChange(state, (path, value) => {
-//   const validation = validate(state.registrationForm.data);
-
-//   if (Object.keys(validation).length === 0) console.log('Object.keys(validation).length === 0');
-
-// });
-
-
+const validate = (fields, state) => {
+  const schema = yup.object().shape({
+    input: yup.string().trim().required().url()
+      .notOneOf(
+        [...state.rss, null],
+        'RSS уже существует',
+      ),
+  });
+  try {
+    schema.validateSync(fields, { abortEarly: false });
+    return {};
+  } catch (e) {
+    return keyBy(e.inner, 'path');
+  }
+};
 
 const init = () => {
   const state = {
-    rss: ['hey'],
+    rss: [],
     url: '',
     form: {
       valid: true,
@@ -48,59 +37,62 @@ const init = () => {
   return state;
 };
 
+const render = (elements, state) => {
+  console.log('elements.input.value === ', elements.input.value);
+  if (elements.input.value === '') return;
+  if (state.rss.includes(elements.input.value)) {
+    elements.urlExample.nextElementSibling.classList.remove('text-success');
+    elements.urlExample.nextElementSibling.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-danger');
+    elements.urlExample.nextElementSibling.textContent = 'RSS уже существует';
+    state.form.rssDuplication = false;
+    return;
+  }
+  if (state.form.valid === true) {
+    elements.urlExample.nextElementSibling.classList.remove('text-danger');
+    elements.urlExample.nextElementSibling.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-success');
+    elements.urlExample.nextElementSibling.textContent = 'RSS успешно загружен';
+    state.rss.push(elements.input.value)
+    elements.form.reset();
+    elements.input.focus();
+    state.form.valid = false;
+    return;
+  }
+  if (state.form.valid === false) {
+    elements.urlExample.nextElementSibling.classList.remove('text-success');
+    elements.urlExample.nextElementSibling.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-danger');
+    elements.urlExample.nextElementSibling.textContent = 'Ссылка должна быть валидным URL';
+  }
+}
+
 export default () => {
   const elements = {
     // container: document.querySelector('[data-container="sign-up"]'),
     form: document.querySelector('[rss-form="form"]'),
     input: document.querySelector('[rss-form="input"]'),
     submitButton: document.querySelector('[rss-form="button"]'),
+    urlExample: document.querySelector('#url-example'),
   };
 
   const state = init();
 
-  elements.input.addEventListener('input', (e) => {
-    // watchedState.registrationForm.data.password = e.target.value;
-    console.log('input');
-    // console.log(e.target.value);
-
+  const watchedState = onChange(state, (path, value) => {
+    const validation = validate(state.form.fields, state);
+    if (Object.keys(validation).length === 0) {
+      state.form.valid = true;
+    } else if (validation.input.message === 'RSS уже существует') {
+      state.form.valid = false;
+    } else {
+      state.form.valid = false;
+    }
   });
 
   elements.submitButton.addEventListener('click', (e) => {
     e.preventDefault();
-    // watchedState.registrationForm.data.password = e.target.value;
-    state.rss.push(elements.input.value)
-    console.log(state.rss);
-
-    const test = document.createElement('p');
-    test.textContent = elements.input.value;
-    test.classList.add('text-white')
-    elements.form.after(test)
-    elements.form.append(test)
-
-    elements.input.value = '';
-    console.log(elements.input);
-    elements.input.focus();
-
-    // const errors = validate(state.form.fields);
-    // console.log(errors);
-    // watchedState.registrationForm.data.name = e.target.value;
-
+    watchedState.form.fields.input = elements.input.value;
+    render(elements, state);
   });
 
   // elements.submitButton.addEventListener('submit', (e) => {
   //   e.preventDefault();
-  //   // // console.log(elements.input.value);
-  //   // state.rss.push('submit')
-  //   // console.log(state.rss);
-  //   // // watchedState.registrationForm.data.password = e.target.value;
-  //   // console.log('button');
-  //   const test = document.createElement('p');
-  //   test.textContent = 'submit';
-  //   elements.form.after(test)
-  //   elements.form.append(test)
   // });
-
 }
-
-// module.exports = test;
-// export default test;
