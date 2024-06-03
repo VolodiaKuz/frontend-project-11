@@ -20,17 +20,15 @@ const validate = (fields, state) => {
   }
 };
 
-const getWatchedState = (state) => {
-  return onChange(state, () => {
-    const validation = validate(state.form.fields, state);
-    if (Object.keys(validation).length === 0) {
-      state.form.valid = true;
-    } else if (validation.input.message === 'RSS уже существует') {
-      state.form.valid = false;
-    } else {
-      state.form.valid = false;
-    }
-  });
-}
+const getWatchedState = (state) => onChange(state, () => {
+  const validation = validate(state.form.fields, state);
+  if (Object.keys(validation).length === 0) {
+    state.form.valid = true;
+  } else if (validation.input.message === 'RSS уже существует') {
+    state.form.valid = false;
+  } else {
+    state.form.valid = false;
+  }
+});
 
 export default getWatchedState;
