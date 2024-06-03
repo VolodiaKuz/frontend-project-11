@@ -19,20 +19,22 @@ const init = () => {
   return state;
 };
 
-const render = (elements, state) => {
+const render = (elements, state, i18nInstance) => {
   console.log('elements.input.value === ', elements.input.value);
   if (elements.input.value === '') return;
   if (state.rss.includes(elements.input.value)) {
     elements.urlExample.nextElementSibling.classList.remove('text-success');
-    elements.urlExample.nextElementSibling.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-danger');
-    elements.urlExample.nextElementSibling.textContent = 'RSS уже существует';
+    elements.urlExample.nextElementSibling.classList.add('text-danger');
+    elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.alreadyExist`);
+    // elements.urlExample.nextElementSibling.textContent = 'RSS уже существует';
     state.form.rssDuplication = false;
     return;
   }
   if (state.form.valid === true) {
     elements.urlExample.nextElementSibling.classList.remove('text-danger');
-    elements.urlExample.nextElementSibling.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-success');
-    elements.urlExample.nextElementSibling.textContent = 'RSS успешно загружен';
+    elements.urlExample.nextElementSibling.classList.add('text-success');
+    elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.sucessfullyUuploaded`);
+    // elements.urlExample.nextElementSibling.textContent = 'RSS успешно загружен';
     state.rss.push(elements.input.value)
     elements.form.reset();
     elements.input.focus();
@@ -41,8 +43,9 @@ const render = (elements, state) => {
   }
   if (state.form.valid === false) {
     elements.urlExample.nextElementSibling.classList.remove('text-success');
-    elements.urlExample.nextElementSibling.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-danger');
-    elements.urlExample.nextElementSibling.textContent = 'Ссылка должна быть валидным URL';
+    elements.urlExample.nextElementSibling.classList.add('text-danger');
+    elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.invalidUrl`);
+    // elements.urlExample.nextElementSibling.textContent = 'Ссылка должна быть валидным URL';
   }
 }
 
@@ -70,7 +73,7 @@ export default async () => {
   elements.submitButton.addEventListener('click', (e) => {
     e.preventDefault();
     watchedState.form.fields.input = elements.input.value;
-    render(elements, state);
+    render(elements, state, i18nInstance);
   });
 
   // elements.submitButton.addEventListener('submit', (e) => {

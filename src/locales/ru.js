@@ -1,11 +1,9 @@
 export default {
   translation: {
-    // BEGIN (write your solution here)
-    buttonLanguage: 'Русский',
-    click_one: '{{count}} клик',
-    click_few: '{{count}} клика',
-    click_many: '{{count}} кликов',
-    buttonReset: 'Сбросить',
-    // END
+    rssInput: {
+      sucessfullyUuploaded: 'RSS успешно загружен',
+      alreadyExist: 'RSS уже существует',
+      invalidUrl: 'Ссылка должна быть валидным URL',
+    },
   },
 };
