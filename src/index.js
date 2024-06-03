@@ -4,8 +4,9 @@
 import * as yup from '../node_modules/yup';
 import onChange from '../node_modules/on-change';
 // import { object, string } from 'yup';
-import keyBy from 'lodash/keyBy.js';
-import isEmpty from 'lodash/isEmpty.js';
+// import keyBy from 'lodash/keyBy.js';
+import keyBy from '../node_modules/lodash/keyBy.js';
+
 
 const validate = (fields, state) => {
   const schema = yup.object().shape({
