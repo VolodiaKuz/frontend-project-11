@@ -1,6 +1,8 @@
 // import './styles.scss';
 // import 'bootstrap';
 import getWatchedState from './watchers.js';
+import i18n from 'i18next';
+import resources from './locales/index.js';
 
 const init = () => {
   const state = {
@@ -55,6 +57,15 @@ export default async () => {
 
   const state = init();
   const watchedState = getWatchedState(state);
+
+  const i18nInstance = i18n.createInstance();
+  await i18nInstance.init({
+    lng: 'ru',
+    debug: false,
+    resources,
+  });
+
+  console.log(i18nInstance.t(`buttonLanguage`));
 
   elements.submitButton.addEventListener('click', (e) => {
     e.preventDefault();
