@@ -1,6 +1,6 @@
 // import './styles.scss';
 // import 'bootstrap';
-import getWatchedState from './wathers.js';
+import getWatchedState from './watchers.js';
 
 const init = () => {
   const state = {
@@ -44,7 +44,7 @@ const render = (elements, state) => {
   }
 }
 
-export default () => {
+export default async () => {
   const elements = {
     // container: document.querySelector('[data-container="sign-up"]'),
     form: document.querySelector('[rss-form="form"]'),
