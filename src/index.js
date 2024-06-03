@@ -1,27 +1,27 @@
 // import './styles.scss';
 // import 'bootstrap';
 
-// import * as yup from 'yup';
-import onChange from 'on-change';
-import { object, string } from 'yup';
+import * as yup from '../node_modules/yup';
+import onChange from '../node_modules/on-change';
+// import { object, string } from 'yup';
 import keyBy from 'lodash/keyBy.js';
 import isEmpty from 'lodash/isEmpty.js';
 
 const validate = (fields, state) => {
-  // const schema = yup.object().shape({
-  //   input: yup.string().trim().required().url()
-  //     .notOneOf(
-  //       [...state.rss, null],
-  //       'RSS уже существует',
-  //     ),
-  // });
-  const schema = object().shape({
-    input: string().trim().required().url()
+  const schema = yup.object().shape({
+    input: yup.string().trim().required().url()
       .notOneOf(
         [...state.rss, null],
         'RSS уже существует',
       ),
   });
+  // const schema = object().shape({
+  //   input: string().trim().required().url()
+  //     .notOneOf(
+  //       [...state.rss, null],
+  //       'RSS уже существует',
+  //     ),
+  // });
   try {
     schema.validateSync(fields, { abortEarly: false });
     return {};
