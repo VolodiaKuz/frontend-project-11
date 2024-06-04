@@ -1,7 +1,7 @@
 // import './styles.scss';
 // import 'bootstrap';
 import getWatchedState from './watchers.js';
-// import i18n from 'i18next';
+import i18n from 'i18next';
 import resources from './locales/index.js';
 
 const init = () => {
@@ -20,7 +20,7 @@ const init = () => {
 };
 
 const render = (elements, state, i18nInstance) => {
-  console.log('elements.input.value === ', elements.input.value);
+  // console.log('elements.input.value === ', elements.input.value);
   if (elements.input.value === '') return;
   if (state.rss.includes(elements.input.value)) {
     elements.urlExample.nextElementSibling.classList.remove('text-success');
@@ -49,8 +49,6 @@ const render = (elements, state, i18nInstance) => {
   }
 }
 
-import i18n from 'i18next';
-
 export default async () => {
   const elements = {
     // container: document.querySelector('[data-container="sign-up"]'),
@@ -69,8 +67,6 @@ export default async () => {
     debug: false,
     resources,
   });
-
-  console.log(i18nInstance.t(`buttonLanguage`));
 
   elements.submitButton.addEventListener('click', (e) => {
     e.preventDefault();
