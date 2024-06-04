@@ -1,7 +1,7 @@
 // import './styles.scss';
 // import 'bootstrap';
 import getWatchedState from './watchers.js';
-import i18n from 'i18next';
+// import i18n from 'i18next';
 import resources from './locales/index.js';
 
 const init = () => {
@@ -48,6 +48,8 @@ const render = (elements, state, i18nInstance) => {
     // elements.urlExample.nextElementSibling.textContent = 'Ссылка должна быть валидным URL';
   }
 }
+
+import i18n from 'i18next';
 
 export default async () => {
   const elements = {
