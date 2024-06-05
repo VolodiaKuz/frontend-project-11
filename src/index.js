@@ -4,6 +4,7 @@ import getWatchedState from './watchers.js';
 import i18n from 'i18next';
 import resources from './locales/index.js';
 import axios from 'axios';
+import getRss from './parser.js';
 
 const init = () => {
   const state = {
@@ -15,38 +16,21 @@ const init = () => {
       fields: {
         input: '',
       },
-    }
+    },
+    elements: {
+      form: document.querySelector('[rss-form="form"]'),
+      input: document.querySelector('[rss-form="input"]'),
+      submitButton: document.querySelector('[rss-form="button"]'),
+      urlExample: document.querySelector('#url-example'),
+      postsDiv: document.querySelector('.posts'),
+      feedsDiv: document.querySelector('.feeds'),
+    },
+    posts: [],
   };
   return state;
 };
 
-const render = (elements, state, i18nInstance) => {
-  if (elements.input.value === '') return;
-  if (state.rss.includes(elements.input.value)) {
-    elements.urlExample.nextElementSibling.classList.remove('text-success');
-    elements.urlExample.nextElementSibling.classList.add('text-danger');
-    elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.alreadyExist`);
-    state.form.rssDuplication = false;
-    return;
-  }
-  if (state.form.valid === true) {
-    elements.urlExample.nextElementSibling.classList.remove('text-danger');
-    elements.urlExample.nextElementSibling.classList.add('text-success');
-    elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.sucessfullyUuploaded`);
-    state.rss.push(elements.input.value)
-    elements.form.reset();
-    elements.input.focus();
-    state.form.valid = false;
-    return;
-  }
-  if (state.form.valid === false) {
-    elements.urlExample.nextElementSibling.classList.remove('text-success');
-    elements.urlExample.nextElementSibling.classList.add('text-danger');
-    elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.invalidUrl`);
-  }
-}
-
-const renderPosts = (elements, state, posts) => {
+const renderPosts = (state) => {
   const postsDivCard = document.createElement('div');
   postsDivCard.classList.add('card', 'border-0');
   const postsDivCardBody = document.createElement('div');
@@ -56,7 +40,7 @@ const renderPosts = (elements, state, posts) => {
   postsHeader.textContent = 'Посты';
   const postsUl = document.createElement('ul');
   postsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  elements.postsDiv.append(postsDivCard);
+  state.elements.postsDiv.append(postsDivCard);
   postsDivCard.append(postsDivCardBody);
   postsDivCardBody.append(postsHeader);
   postsDivCard.append(postsUl);
@@ -70,7 +54,7 @@ const renderPosts = (elements, state, posts) => {
   feedsHeader.textContent = 'Фиды';
   const feedsUl = document.createElement('ul');
   feedsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  elements.feedsDiv.append(feedsDivCard);
+  state.elements.feedsDiv.append(feedsDivCard);
   feedsDivCard.append(feedsDivCardBody);
   feedsDivCardBody.append(feedsHeader);
   feedsDivCard.append(feedsUl);
@@ -87,7 +71,8 @@ const renderPosts = (elements, state, posts) => {
   feedsLi.append(feedsH3);
   feedsLi.append(feedsParagraph);
 
-  posts.forEach((post) => {
+  state.posts.forEach((post) => {
+    console.log('post', post);
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
     const a = document.createElement('a');
@@ -102,20 +87,38 @@ const renderPosts = (elements, state, posts) => {
   })
 };
 
-export default async () => {
-  const elements = {
-    // container: document.querySelector('[data-container="sign-up"]'),
-    form: document.querySelector('[rss-form="form"]'),
-    input: document.querySelector('[rss-form="input"]'),
-    submitButton: document.querySelector('[rss-form="button"]'),
-    urlExample: document.querySelector('#url-example'),
-    postsDiv: document.querySelector('.posts'),
-    feedsDiv: document.querySelector('.feeds'),
-  };
+const render = async (state, i18nInstance) => {
+  if (state.elements.input.value === '') return;
+  if (state.rss.includes(state.elements.input.value)) {
+    state.elements.urlExample.nextElementSibling.classList.remove('text-success');
+    state.elements.urlExample.nextElementSibling.classList.add('text-danger');
+    state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.alreadyExist`);
+    state.form.rssDuplication = false;
+    return;
+  }
+  if (state.form.valid === true) {
+    state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
+    state.elements.urlExample.nextElementSibling.classList.add('text-success');
+    state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.sucessfullyUuploaded`);
+    state.rss.push(state.elements.input.value)
+    state.elements.form.reset();
+    state.elements.input.focus();
+    state.form.valid = false;
+    await getRss(state);
+    console.log('state.posts before renderPosts', state.posts);
+    renderPosts(state);
+    return;
+  }
+  if (state.form.valid === false) {
+    state.elements.urlExample.nextElementSibling.classList.remove('text-success');
+    state.elements.urlExample.nextElementSibling.classList.add('text-danger');
+    state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.invalidUrl`);
+  }
+}
 
+export default async () => {
   const state = init();
   const watchedState = getWatchedState(state);
-  const posts = [];
   const i18nInstance = i18n.createInstance();
   await i18nInstance.init({
     lng: 'ru',
@@ -123,43 +126,16 @@ export default async () => {
     resources,
   });
 
-  elements.submitButton.addEventListener('click', (e) => {
+  state.elements.submitButton.addEventListener('click', (e) => {
     e.preventDefault();
-    watchedState.form.fields.input = elements.input.value;
-    render(elements, state, i18nInstance);
+    watchedState.form.fields.input = state.elements.input.value;
+    render(state, i18nInstance);
   });
 
-  // elements.submitButton.addEventListener('submit', (e) => {
+  // state.elements.submitButton.addEventListener('submit', (e) => {
   //   e.preventDefault();
   // });
 
-  // const apiUrl = 'https://604781a0efa572c1.mokky.dev/items';
-  // const apiUrl = 'http://lorem-rss.herokuapp.com/feed';
-  // const apiUrl = 'http://rss.cnn.com/rss/cnn_topstories.rss';
-  // const apiUrl = 'https://lorem-rss.hexlet.app/feed';
-  const apiUrl = 'https://allorigins.hexlet.app/raw?url=https://lorem-rss.hexlet.app/feed';
-
-
-
-  axios.get(apiUrl)
-    .then(function (response) {
-      const result = {};
-
-      const xmlString = response.data;
-      const parser = new DOMParser();
-      const parsedHtml = parser.parseFromString(xmlString, "text/html");
-
-      const re = /<!\[CDATA\[(.*?)\]\]>/mg;
-      parsedHtml.querySelectorAll("item").forEach((item) => {
-        posts.push(/<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent)[1]);
-      })
-      console.log(posts);
-      renderPosts(elements, state, posts);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    });
 }
 
 // Lorem ipsum 2024-06-04T17:02:00Z  // демонстр проект
