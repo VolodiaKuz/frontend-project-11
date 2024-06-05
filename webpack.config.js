@@ -13,7 +13,6 @@ const config = {
     entry: './src/init.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        // path: path.resolve('./', 'public'),
         // clean: true,
     },
     devServer: {

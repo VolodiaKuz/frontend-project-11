@@ -124,7 +124,9 @@ export default async () => {
   // const apiUrl = 'https://604781a0efa572c1.mokky.dev/items';
   // const apiUrl = 'http://lorem-rss.herokuapp.com/feed';
   // const apiUrl = 'http://rss.cnn.com/rss/cnn_topstories.rss';
-  const apiUrl = 'https://lorem-rss.hexlet.app/feed';
+  // const apiUrl = 'https://lorem-rss.hexlet.app/feed';
+  const apiUrl = 'https://allorigins.hexlet.app/raw?url=https://lorem-rss.hexlet.app/feed';
+
 
 
   axios.get(apiUrl)
