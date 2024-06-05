@@ -1,5 +1,5 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
-// import path from 'path';
+import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 // const path = require('path');
@@ -13,7 +13,8 @@ export default {
     entry: './src/index.js',
     output: {
         // path: path.resolve(__dirname, 'dist'),
-        clean: true,
+        path: path.resolve('./', 'public'),
+        // clean: true,
     },
     devServer: {
         open: true,
