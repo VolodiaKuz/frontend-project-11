@@ -10,7 +10,7 @@ const isProduction = process.env.NODE_ENV == 'production';
 
 
 export default {
-    // entry: './src/index.js',
+    entry: './src/index.js',
     output: {
         // path: path.resolve(__dirname, 'dist'),
         clean: true,
