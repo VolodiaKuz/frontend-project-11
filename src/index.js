@@ -75,6 +75,18 @@ const renderPosts = (elements, state, posts) => {
   feedsDivCardBody.append(feedsHeader);
   feedsDivCard.append(feedsUl);
 
+  const feedsLi = document.createElement('li');
+  feedsLi.classList.add('list-group-item', 'border-0', 'border-end-0')
+  const feedsH3 = document.createElement('h3');
+  feedsH3.classList.add('h6', 'm-0');
+  feedsH3.textContent = 'Lorem ipsum feed for an interval of 1 minutes with 10 item(s)';
+  const feedsParagraph = document.createElement('p');
+  feedsParagraph.classList.add('m-0', 'small', 'text-black-50');
+  feedsParagraph.textContent = 'This is a constantly updating lorem ipsum feed';
+  feedsUl.append(feedsLi);
+  feedsLi.append(feedsH3);
+  feedsLi.append(feedsParagraph);
+
   posts.forEach((post) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
@@ -136,30 +148,17 @@ export default async () => {
       const xmlString = response.data;
       const parser = new DOMParser();
       const parsedHtml = parser.parseFromString(xmlString, "text/html");
-      console.log('parsedHtml-', parsedHtml);
 
-      // const items = parsedHtml.querySelectorAll("item");
-      // items.forEach((el) => console.log(el.title))
-
-      // parsedHtml.querySelectorAll("item").forEach((item) => console.log(item.querySelector('title').innerText))
       const re = /<!\[CDATA\[(.*?)\]\]>/mg;
-      // parsedHtml.querySelectorAll("item").forEach((item) => console.log(item.querySelector('title')))
       parsedHtml.querySelectorAll("item").forEach((item) => {
-        // console.log(item.querySelector('title').textContent);
-        // console.log(/<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent)[1]);
         posts.push(/<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent)[1]);
       })
       console.log(posts);
       renderPosts(elements, state, posts);
-
-
     })
     .catch(function (error) {
       // handle error
       console.log(error);
-    })
-    .finally(function () {
-      // always executed
     });
 }
 
