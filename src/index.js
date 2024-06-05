@@ -81,7 +81,11 @@ const renderPosts = (elements, state, posts) => {
     const a = document.createElement('a');
     a.classList.add('fw-bold')
     a.textContent = post;
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.textContent = 'Просмотр';
     li.append(a);
+    li.append(button);
     postsUl.append(li);
   })
 };
