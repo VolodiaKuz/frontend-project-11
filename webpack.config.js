@@ -13,7 +13,7 @@ const config = {
     entry: './src/init.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        // clean: true,
+        clean: true,
     },
     devServer: {
         open: true,

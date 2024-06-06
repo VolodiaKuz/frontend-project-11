@@ -1,14 +1,14 @@
 import axios from 'axios';
-import { array } from 'yup';
+// import { array } from 'yup';
 
-// const apiUrl = 'https://604781a0efa572c1.mokky.dev/items';
-// const apiUrl = 'http://lorem-rss.herokuapp.com/feed';
 // const apiUrl = 'http://rss.cnn.com/rss/cnn_topstories.rss';
-// const apiUrl = 'https://lorem-rss.hexlet.app/feed';
-const apiUrl = 'https://allorigins.hexlet.app/raw?url=https://lorem-rss.hexlet.app/feed';
+// const apiUrl = 'https://allorigins.hexlet.app/raw?url=https://lorem-rss.hexlet.app/feed';
 
-const getRss = async (state) => {
-  await axios.get(apiUrl)
+
+const getRss = async (state, url) => {
+  const alloriginsApi = 'https://allorigins.hexlet.app/raw?url=';
+  const urlWithApi = `${alloriginsApi}${url}`
+  await axios.get(urlWithApi)
     .then(function (response) {
       const posts2 = [];
       const xmlString = response.data;

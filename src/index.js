@@ -72,7 +72,6 @@ const renderPosts = (state) => {
   feedsLi.append(feedsParagraph);
 
   state.posts.forEach((post) => {
-    console.log('post', post);
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
     const a = document.createElement('a');
@@ -101,12 +100,12 @@ const render = async (state, i18nInstance) => {
     state.elements.urlExample.nextElementSibling.classList.add('text-success');
     state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.sucessfullyUuploaded`);
     state.rss.push(state.elements.input.value)
+    console.log('state.elements.input.value-', state.elements.input.value);
+    await getRss(state, state.elements.input.value);
+    renderPosts(state);
     state.elements.form.reset();
     state.elements.input.focus();
     state.form.valid = false;
-    await getRss(state);
-    console.log('state.posts before renderPosts', state.posts);
-    renderPosts(state);
     return;
   }
   if (state.form.valid === false) {
