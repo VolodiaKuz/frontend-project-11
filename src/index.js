@@ -31,6 +31,42 @@ const init = () => {
   return state;
 };
 
+const closeModalDiv = () => {
+  const modalDiv = document.querySelector('#modal')
+  modalDiv.classList.remove('show')
+  modalDiv.removeAttribute("style", 'display: block');
+  modalDiv.removeAttribute("aria-modal", 'true');
+  modalDiv.removeAttribute("role", 'dialog');
+  modalDiv.setAttribute("aria-hidden", 'true');
+  const body = document.querySelector('body')
+  body.classList.remove('modal-open')
+  body.removeAttribute("style");
+}
+
+const renderModalDialog = (post) => {
+  const modalDiv = document.querySelector('#modal')
+  modalDiv.classList.add('show')
+  modalDiv.setAttribute("style", 'display: block');
+  modalDiv.setAttribute("aria-modal", 'true');
+  modalDiv.setAttribute("role", 'dialog');
+  modalDiv.removeAttribute("aria-hidden");
+  const body = document.querySelector('body')
+  body.classList.add('modal-open')
+  body.setAttribute("style", 'overflow: hidden; padding-right: 18px;');
+
+  document.querySelector('.modal-title').textContent = post.title;
+  document.querySelector('.modal-body').textContent = post.description;
+  document.querySelector('.modal-footer a').setAttribute('href', post.link)
+
+  document.querySelector('.modal-footer button').addEventListener('click', (e) => {
+    closeModalDiv();
+  })
+
+  document.querySelector('.modal-header button').addEventListener('click', (e) => {
+    closeModalDiv();
+  })
+}
+
 const renderPosts = (state, i18nInstance) => {
   const postsDivCard = document.createElement('div');
   postsDivCard.classList.add('card', 'border-0');
@@ -64,7 +100,7 @@ const renderPosts = (state, i18nInstance) => {
   feedsLi.classList.add('list-group-item', 'border-0', 'border-end-0')
   const feedsH3 = document.createElement('h3');
   feedsH3.classList.add('h6', 'm-0');
-  feedsH3.textContent = 'Lorem ipsum feed for an interval of 1 minutes with 10 item(s)';
+  feedsH3.textContent = `Lorem ipsum feed for an interval of 1 minutes with ${state.posts.length} item(s)`;
   const feedsParagraph = document.createElement('p');
   feedsParagraph.classList.add('m-0', 'small', 'text-black-50');
   feedsParagraph.textContent = 'This is a constantly updating lorem ipsum feed';
@@ -76,14 +112,23 @@ const renderPosts = (state, i18nInstance) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
     const a = document.createElement('a');
+    a.setAttribute("href", post.link);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("data-id", post.id);
     a.classList.add('fw-bold')
-    a.textContent = post;
+    a.textContent = post.title;
     const button = document.createElement('button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.setAttribute("data-id", post.id);
     button.textContent = 'Просмотр';
     li.append(a);
     li.append(button);
     postsUl.append(li);
+
+    button.addEventListener('click', (e) => {
+      // alert(post.title)
+      renderModalDialog(post);
+    })
   })
   state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
   state.elements.urlExample.nextElementSibling.classList.add('text-success');
