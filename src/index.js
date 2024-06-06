@@ -9,6 +9,7 @@ import getRss from './parser.js';
 const init = () => {
   const state = {
     rss: [],
+    errors: [],
     url: '',
     form: {
       valid: true,
@@ -30,7 +31,7 @@ const init = () => {
   return state;
 };
 
-const renderPosts = (state) => {
+const renderPosts = (state, i18nInstance) => {
   const postsDivCard = document.createElement('div');
   postsDivCard.classList.add('card', 'border-0');
   const postsDivCardBody = document.createElement('div');
@@ -84,6 +85,9 @@ const renderPosts = (state) => {
     li.append(button);
     postsUl.append(li);
   })
+  state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
+  state.elements.urlExample.nextElementSibling.classList.add('text-success');
+  state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.sucessfullyUuploaded`);
 };
 
 const render = async (state, i18nInstance) => {
@@ -96,13 +100,14 @@ const render = async (state, i18nInstance) => {
     return;
   }
   if (state.form.valid === true) {
-    state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
-    state.elements.urlExample.nextElementSibling.classList.add('text-success');
-    state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.sucessfullyUuploaded`);
     state.rss.push(state.elements.input.value)
     console.log('state.elements.input.value-', state.elements.input.value);
     await getRss(state, state.elements.input.value);
-    renderPosts(state);
+    if (state.errors.length !== 0) {
+      state.errors = [];
+      return;
+    }
+    renderPosts(state, i18nInstance);
     state.elements.form.reset();
     state.elements.input.focus();
     state.form.valid = false;
