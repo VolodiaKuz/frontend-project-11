@@ -68,6 +68,9 @@ const renderModalDialog = (post) => {
 }
 
 const renderPosts = (state, i18nInstance) => {
+  state.elements.postsDiv.innerHTML = '';
+  state.elements.feedsDiv.innerHTML = '';
+
   const postsDivCard = document.createElement('div');
   postsDivCard.classList.add('card', 'border-0');
   const postsDivCardBody = document.createElement('div');
@@ -146,9 +149,13 @@ const render = async (state, i18nInstance) => {
   }
   if (state.form.valid === true) {
     state.rss.push(state.elements.input.value)
-    console.log('state.elements.input.value-', state.elements.input.value);
+    // console.log('state.elements.input.value-', state.elements.input.value);
     await getRss(state, state.elements.input.value);
     if (state.errors.length !== 0) {
+      console.log('state.errors-', state.errors);
+      state.elements.urlExample.nextElementSibling.classList.remove('text-success');
+      state.elements.urlExample.nextElementSibling.classList.add('text-danger');
+      state.elements.urlExample.nextElementSibling.textContent = `Ошибка сети (code: ${state.errors[0]})`;
       state.errors = [];
       return;
     }
