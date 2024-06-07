@@ -16,16 +16,18 @@ const getRss = async (state, url) => {
         const parsedHtml = parser.parseFromString(xmlString, "text/html");
         console.log('parsedHtml', parsedHtml);
         parsedHtml.querySelectorAll("item").forEach((item) => {
-          const title = /<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent)[1];
+          console.log(item);
+          let title;
+          if (item.querySelector('title').textContent.startsWith('<')) {
+            title = /<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent)[1];
+          } else title = item.querySelector('title').textContent;
           // const link = (item.querySelector('link').nextElementSibling); //  tag guid - wtf ???
           const link = (item.querySelector('guid').textContent);
           const id = idGenerator + 1;
           const description = /<!--\[CDATA\[(.*?)\]\]-->/g.exec(item.querySelector('description').innerHTML)[1];
-          // const description = item.querySelector('description').innerHTML;
-          // console.log(description);
           idGenerator += 1;
           const obj = { title, link, id, description }
-          // console.log(obj);
+          console.log(obj);
           posts.push(obj);
         })
         return posts;
