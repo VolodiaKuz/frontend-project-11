@@ -51,7 +51,6 @@ export default async () => {
   // state.elements.submitButton.addEventListener('submit', (e) => {
   //   e.preventDefault();
   // });
-
 }
 
 // Lorem ipsum 2024-06-04T17:02:00Z  // демонстр проект
