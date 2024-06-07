@@ -4,3 +4,4 @@ webpack.config.js
 test.js
 src/index.js
 src/parser.js
+src/render.js
