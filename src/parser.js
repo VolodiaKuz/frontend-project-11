@@ -15,6 +15,7 @@ const getRss = async (state, url) => {
         const parser = new DOMParser();
         const parsedHtml = parser.parseFromString(xmlString, "text/html");
         console.log('parsedHtml', parsedHtml);
+        // console.log('parsedHtml.querySelectorAll("item")', parsedHtml.querySelectorAll("item").length);
         parsedHtml.querySelectorAll("item").forEach((item) => {
           // console.log(item);
           let title;

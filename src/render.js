@@ -1,4 +1,8 @@
 import getRss from './parser.js';
+import updateRss from './updateRss.js';
+import axios from 'axios';
+
+// import updateRss from './updateRss.js';
 
 const closeModalDiv = () => {
   const modalDiv = document.querySelector('#modal')
@@ -108,6 +112,7 @@ const renderPosts = (state, i18nInstance) => {
 };
 
 const render = async (state, i18nInstance) => {
+  // добавить состояние "update" для проверки появления новых постов
   if (state.elements.input.value === '') return;
   if (state.rss.includes(state.elements.input.value)) {
     state.elements.urlExample.nextElementSibling.classList.remove('text-success');
@@ -132,6 +137,52 @@ const render = async (state, i18nInstance) => {
     state.elements.form.reset();
     state.elements.input.focus();
     state.form.valid = false;
+
+    // updateRss(state);
+
+    let delay = 5000;
+
+    let timerId = setTimeout(async function request() {
+      const newPosts = [];
+      const existPostsTitles = state.posts.map((post) => post.title)
+      const alloriginsApi = 'https://allorigins.hexlet.app/raw?url=';
+      const url = state.rss[0];
+      // const updateTime = '?unit=second&interval=30&length=12';
+      const updateTime = '?length=3';
+      const urlWithApi = `${alloriginsApi}${url}${updateTime}`;
+      await axios.get(urlWithApi)
+        .then(function (response) {
+          if (response.status === 200) {
+            const xmlString = response.data;
+            const parser = new DOMParser();
+            const parsedHtml = parser.parseFromString(xmlString, "text/html");
+            // console.log('parsedHtml', parsedHtml);
+            // console.log('parsedHtml.querySelectorAll("item")', parsedHtml.querySelectorAll("item").length);
+            parsedHtml.querySelectorAll("item").forEach((item) => {
+              const title = /<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent)[1];
+              if (!existPostsTitles.includes(title)) {
+                // console.log('new title', title);
+                const link = (item.querySelector('guid').textContent);
+                const description = /<!--\[CDATA\[(.*?)\]\]-->/g.exec(item.querySelector('description').innerHTML)[1];
+                const obj = { title, link, description }
+                console.log(obj);
+                newPosts.push(obj);
+              }
+            })
+            return newPosts;
+          }
+        })
+        .then((posts) => {
+          console.log('new posts - ', posts);
+          // posts.forEach((el) => state.posts.push(el))  
+        })
+        .catch((error) => {
+          console.log('catch error', error)
+          // state.errors.push(error.code)
+        })
+      timerId = setTimeout(request, delay);
+    }, delay);
+
     return;
   }
   if (state.form.valid === false) {

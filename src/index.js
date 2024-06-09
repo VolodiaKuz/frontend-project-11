@@ -10,6 +10,7 @@ import {
 const init = () => {
   const state = {
     rss: [],
+    posts: [],
     errors: [],
     url: '',
     form: {
@@ -27,7 +28,6 @@ const init = () => {
       postsDiv: document.querySelector('.posts'),
       feedsDiv: document.querySelector('.feeds'),
     },
-    posts: [],
   };
   return state;
 };
@@ -46,6 +46,25 @@ export default async () => {
     e.preventDefault();
     watchedState.form.fields.input = state.elements.input.value;
     render(state, i18nInstance);
+
+    // const check = () => {
+    //   let timeoutID;
+    //   if (state.form.valid === false) {
+    //     console.log('timeout is workink');
+    //     state.elements.urlExample.nextElementSibling.textContent = 'test';
+    //     timeoutID = window.setTimeout(check, 2000)
+    //   } else {
+    //     window.clearTimeout(timeoutID);
+    //     return;
+    //   }
+    // }
+    // check();
+
+
+    // let timeoutID; 
+    // if (d) timeoutID = window.setTimeout(check, 2000);
+
+
   });
 
   // state.elements.submitButton.addEventListener('submit', (e) => {
