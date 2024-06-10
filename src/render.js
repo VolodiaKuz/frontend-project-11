@@ -40,7 +40,7 @@ const renderModalDialog = (post) => {
   })
 };
 
-export const printPosts = (posts) => {
+export const printPosts = (state, posts) => {
   const postsUl = document.querySelector('.list-group');
   posts.forEach((post) => {
     const li = document.createElement('li');
@@ -64,7 +64,8 @@ export const printPosts = (posts) => {
       renderModalDialog(post);
       a.classList.add('fw-normal')
       a.classList.remove('fw-bold')
-      // state.ui.posts.push(post.id) // добавить отображение просмотренных постов в UI
+      state.postsUi.watched.push(post.id) // добавить отображение просмотренных постов в UI
+      console.log(state);
     })
   })
 };
@@ -113,7 +114,7 @@ const renderPosts = (state, i18nInstance) => {
   feedsLi.append(feedsH3);
   feedsLi.append(feedsParagraph);
 
-  printPosts(state.posts);
+  printPosts(state, state.posts);
 
   state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
   state.elements.urlExample.nextElementSibling.classList.add('text-success');
@@ -185,7 +186,7 @@ const render = async (state, i18nInstance) => {
         .then((posts) => {
           console.log('new posts - ', posts);
           console.log('state.posts before concat', state.posts);
-          printPosts(posts);
+          printPosts(state, posts);
           // state.posts.concat(posts);
           posts.forEach((el) => state.posts.push(el))
           console.log('state.posts after concat', state.posts);

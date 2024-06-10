@@ -28,6 +28,9 @@ const init = () => {
       postsDiv: document.querySelector('.posts'),
       feedsDiv: document.querySelector('.feeds'),
     },
+    postsUi: {
+      watched: [],
+    },
   };
   return state;
 };
