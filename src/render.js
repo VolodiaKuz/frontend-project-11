@@ -62,6 +62,9 @@ export const printPosts = (posts) => {
     button.addEventListener('click', (e) => {
       // alert(post.title)
       renderModalDialog(post);
+      a.classList.add('fw-normal')
+      a.classList.remove('fw-bold')
+      // state.ui.posts.push(post.id) // добавить отображение просмотренных постов в UI
     })
   })
 };
