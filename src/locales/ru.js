@@ -1,7 +1,7 @@
 export default {
   translation: {
     rssInput: {
-      sucessfullyUuploaded: 'RSS успешно загружен',
+      sucessfullyUploaded: 'RSS успешно загружен',
       alreadyExist: 'RSS уже существует',
       invalidUrl: 'Ссылка должна быть валидным URL',
     },
