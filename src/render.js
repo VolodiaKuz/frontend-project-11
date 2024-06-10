@@ -40,6 +40,32 @@ const renderModalDialog = (post) => {
   })
 };
 
+export const printPosts = (posts) => {
+  const postsUl = document.querySelector('.list-group');
+  posts.forEach((post) => {
+    const li = document.createElement('li');
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
+    const a = document.createElement('a');
+    a.setAttribute("href", post.link);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("data-id", post.id);
+    a.classList.add('fw-bold')
+    a.textContent = post.title;
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.setAttribute("data-id", post.id);
+    button.textContent = 'Просмотр';
+    li.append(a);
+    li.append(button);
+    postsUl.append(li);
+
+    button.addEventListener('click', (e) => {
+      // alert(post.title)
+      renderModalDialog(post);
+    })
+  })
+};
+
 const renderPosts = (state, i18nInstance) => {
   state.elements.postsDiv.innerHTML = '';
   state.elements.feedsDiv.innerHTML = '';
@@ -84,28 +110,8 @@ const renderPosts = (state, i18nInstance) => {
   feedsLi.append(feedsH3);
   feedsLi.append(feedsParagraph);
 
-  state.posts.forEach((post) => {
-    const li = document.createElement('li');
-    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
-    const a = document.createElement('a');
-    a.setAttribute("href", post.link);
-    a.setAttribute("target", "_blank");
-    a.setAttribute("data-id", post.id);
-    a.classList.add('fw-bold')
-    a.textContent = post.title;
-    const button = document.createElement('button');
-    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    button.setAttribute("data-id", post.id);
-    button.textContent = 'Просмотр';
-    li.append(a);
-    li.append(button);
-    postsUl.append(li);
+  printPosts(state.posts);
 
-    button.addEventListener('click', (e) => {
-      // alert(post.title)
-      renderModalDialog(post);
-    })
-  })
   state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
   state.elements.urlExample.nextElementSibling.classList.add('text-success');
   state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.sucessfullyUuploaded`);
@@ -138,7 +144,7 @@ const render = async (state, i18nInstance) => {
     state.elements.input.focus();
     state.form.valid = false;
 
-    // updateRss(state);
+    // let timer = updateRss();
 
     let delay = 5000;
 
@@ -147,8 +153,8 @@ const render = async (state, i18nInstance) => {
       const existPostsTitles = state.posts.map((post) => post.title)
       const alloriginsApi = 'https://allorigins.hexlet.app/raw?url=';
       const url = state.rss[0];
-      // const updateTime = '?unit=second&interval=30&length=12';
-      const updateTime = '?length=3';
+      // const updateTime = '?unit=second&interval=2+length=3';
+      const updateTime = '?length=2';
       const urlWithApi = `${alloriginsApi}${url}${updateTime}`;
       await axios.get(urlWithApi)
         .then(function (response) {
@@ -157,11 +163,12 @@ const render = async (state, i18nInstance) => {
             const parser = new DOMParser();
             const parsedHtml = parser.parseFromString(xmlString, "text/html");
             // console.log('parsedHtml', parsedHtml);
-            // console.log('parsedHtml.querySelectorAll("item")', parsedHtml.querySelectorAll("item").length);
+            // console.log('parsedHtml.querySelectorAll("item")', parsedHtml.querySelectorAll("item"));
             parsedHtml.querySelectorAll("item").forEach((item) => {
+              console.log(item);
               const title = /<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent)[1];
               if (!existPostsTitles.includes(title)) {
-                // console.log('new title', title);
+                console.log('new title', title);
                 const link = (item.querySelector('guid').textContent);
                 const description = /<!--\[CDATA\[(.*?)\]\]-->/g.exec(item.querySelector('description').innerHTML)[1];
                 const obj = { title, link, description }
@@ -174,6 +181,11 @@ const render = async (state, i18nInstance) => {
         })
         .then((posts) => {
           console.log('new posts - ', posts);
+          console.log('state.posts before concat', state.posts);
+          printPosts(posts);
+          // state.posts.concat(posts);
+          posts.forEach((el) => state.posts.push(el))
+          console.log('state.posts after concat', state.posts);
           // posts.forEach((el) => state.posts.push(el))  
         })
         .catch((error) => {
@@ -183,8 +195,10 @@ const render = async (state, i18nInstance) => {
       timerId = setTimeout(request, delay);
     }, delay);
 
+
     return;
   }
+
   if (state.form.valid === false) {
     state.elements.urlExample.nextElementSibling.classList.remove('text-success');
     state.elements.urlExample.nextElementSibling.classList.add('text-danger');
