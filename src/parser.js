@@ -3,23 +3,26 @@ import axios from 'axios';
 let idGenerator = 1;
 
 const getRss = async (state, url) => {
-  const alloriginsApi = 'https://allorigins.hexlet.app/raw?url=';
+  const alloriginsApi = 'https://allorigins.hexlet.app/get?url=';
   const urlWithApi = `${alloriginsApi}${url}`;
   await axios.get(urlWithApi)
     .then((response) => {
       // if (response.status !== 200) state.errors.push(response.status);
       if (response.status === 200) {
-        // console.log('response status = ', response.status);
+        console.log('response  = ', response);
+        console.log('response  = ', response.data);
+        console.log('response  = ', response.data.contents);
         const posts = [];
-        const xmlString = response.data;
+        // const xmlString = response.data;
         const parser = new DOMParser();
-        const parsedHtml = parser.parseFromString(xmlString, 'text/html');
-        // console.log('parsedHtml', parsedHtml);
+        // const parsedHtml = parser.parseFromString(xmlString, 'text/html');
+        const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
+        console.log('parsedHtml', parsedHtml);
         parsedHtml.querySelectorAll('item').forEach((item) => {
           // console.log(item);
           let title;
           if (item.querySelector('title').textContent.startsWith('<')) {
-            title = /<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent)[1];
+            [, title] = /<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent);
             // console.log('title in if', title);
           } else title = item.querySelector('title').textContent;
           // console.log('title', title);
