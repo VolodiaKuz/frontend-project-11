@@ -1,5 +1,5 @@
-// import './styles.scss';
-// import 'bootstrap';
+import './styles.scss';
+import 'bootstrap';
 import getWatchedState from './watchers.js';
 import i18n from 'i18next';
 import resources from './locales/index.js';
@@ -49,70 +49,9 @@ export default async () => {
     e.preventDefault();
     watchedState.form.fields.input = state.elements.input.value;
     render(state, i18nInstance);
-
-    // const check = () => {
-    //   let timeoutID;
-    //   if (state.form.valid === false) {
-    //     console.log('timeout is workink');
-    //     state.elements.urlExample.nextElementSibling.textContent = 'test';
-    //     timeoutID = window.setTimeout(check, 2000)
-    //   } else {
-    //     window.clearTimeout(timeoutID);
-    //     return;
-    //   }
-    // }
-    // check();
-
-
-    // let timeoutID; 
-    // if (d) timeoutID = window.setTimeout(check, 2000);
-
-
   });
 
   // state.elements.submitButton.addEventListener('submit', (e) => {
   //   e.preventDefault();
   // });
 }
-
-// Lorem ipsum 2024-06-04T17:02:00Z  // демонстр проект
-// Lorem ipsum 2024-06-04T17:02:00Z  // мой 
-
-
-// const apiUrl = 'https://604781a0efa572c1.mokky.dev/items';
-// // функция для получения данных
-// async function fetchData() {
-//   try {
-//     // положительный сценарий
-//     const response = await axios.get(apiUrl);
-//     if (response.status === 200) {
-//       const data = response.data;
-//       const tbody = document.querySelector('#productsTable tbody');
-//       tbody.innerHTML = '';
-//       data.forEach((product) => {
-//         const row = document.createElement('tr');
-//         const idCell = document.createElement('td');
-//         idCell.textContent = product.id;
-//         row.appendChild(idCell);
-
-//         const titleCell = document.createElement('td');
-//         titleCell.textContent = product.title;
-//         row.appendChild(titleCell);
-//         const priceCell = document.createElement('td');
-//         priceCell.textContent = product.price;
-//         row.appendChild(priceCell);
-//         const imageUrl = product.image;
-//         const imageCell = document.createElement('td');
-//         imageCell.innerHTML = `<img src="${imageUrl}" alt="${product.title}" style="width: 100px;">`;
-//         row.appendChild(imageCell);
-//         tbody.appendChild(row);
-//       });
-//     } else {
-//       console.error('Ошибка запроса', response.status);
-//     }
-//     console.log('data', data);
-//   } catch (error) {
-//     // сценарий с ошибкой
-//     console.error('Ошибка при выполнении запроса', error.message);
-//   }
-// }
