@@ -2,4 +2,3 @@ node_modules
 dist
 webpack.config.js
 src/index.js
-src/parser.js
