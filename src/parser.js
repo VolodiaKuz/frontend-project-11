@@ -3,7 +3,7 @@ import axios from 'axios';
 let idGenerator = 1;
 
 const getRss = async (state, url) => {
-  const alloriginsApi = 'https://allorigins.hexlet.app/get?url=';
+  const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
   const urlWithApi = `${alloriginsApi}${url}`;
   await axios.get(urlWithApi)
     .then((response) => {
