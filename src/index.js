@@ -1,10 +1,10 @@
 import './styles.scss';
 import 'bootstrap';
-import getWatchedState from './watchers.js';
 import i18n from 'i18next';
+import getWatchedState from './watchers.js';
 import resources from './locales/index.js';
 import {
-  render
+  render,
 } from './render.js';
 
 const init = () => {
@@ -54,4 +54,4 @@ export default async () => {
   // state.elements.submitButton.addEventListener('submit', (e) => {
   //   e.preventDefault();
   // });
-}
+};
