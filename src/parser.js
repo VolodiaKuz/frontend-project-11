@@ -34,18 +34,22 @@ const getRss = async (state, url) => {
         // console.log('parsedHtml', parsedHtml);
         parsedHtml.querySelectorAll('item').forEach((item) => {
           // console.log(item);
-          let title;
-          if (item.querySelector('title').textContent.startsWith('<')) {
-            [, title] = /<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent);
-            // console.log('title in if', title);
-          } else title = item.querySelector('title').textContent;
+
+          // let title;
+          // if (item.querySelector('title').textContent.startsWith('<')) {
+          //   [, title] = /<!\[CDATA\[(.*?)\]\]>/g.exec(item.querySelector('title').textContent);
+          //   // console.log('title in if', title);
+          // } else title = item.querySelector('title').textContent;
+
+          const title = item.querySelector('title').textContent;
           // console.log('title', title);
           // const link = (item.querySelector('link').nextElementSibling); //  tag guid - wtf ???
           const link = (item.querySelector('guid').textContent);
           const id = idGenerator + 1;
           // const description = /<!--\[CDATA\[(.*?)\]\]-->/g
           // .exec(item.querySelector('description').innerHTML)[1];
-          const description = /<!--\[CDATA\[(.*?)\]\]-->/g.exec(item.querySelector('description').innerHTML);
+          // const description = /<!--\[CDATA\[(.*?)\]\]-->/g.exec(item.querySelector('description').innerHTML);
+          const description = item.querySelector('description').innerHTML;
           // console.log('description', description);
           idGenerator += 1;
           const obj = {
@@ -54,6 +58,7 @@ const getRss = async (state, url) => {
           // console.log(obj);
           posts.push(obj);
         });
+        console.log(posts);
         return posts;
       }
     })

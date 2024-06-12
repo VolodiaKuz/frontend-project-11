@@ -15,6 +15,7 @@ const closeModalDiv = () => {
 };
 
 const renderModalDialog = (post) => {
+  console.log('post', post);
   const modalDiv = document.querySelector('#modal');
   modalDiv.classList.add('show');
   modalDiv.setAttribute('style', 'display: block');
