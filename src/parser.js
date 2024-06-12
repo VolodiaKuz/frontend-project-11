@@ -5,9 +5,8 @@ let idGenerator = 1;
 const getRss = async (state, url) => {
   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
   const urlWithApi = `${alloriginsApi}${url}`;
-  return axios.get(urlWithApi)
+  await axios.get(urlWithApi)
     .then((response) => {
-      console.log('проверка');
       if (response.status !== 200) throw new Error('Ошибка сети');
       if (response.status === 200) {
         const posts = [];
@@ -37,9 +36,11 @@ const getRss = async (state, url) => {
         console.log(posts);
         return posts;
       }
+      return null;
     })
     .then((posts) => {
       posts.forEach((el) => state.posts.push(el));
+      return null;
     })
     .catch((error) => {
       console.log('catch error', error);
