@@ -11,6 +11,7 @@ const init = () => {
   const state = {
     rss: [],
     posts: [],
+    feeds: [],
     errors: [],
     url: '',
     form: {

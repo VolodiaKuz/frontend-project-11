@@ -21,19 +21,15 @@ const getRss = async (state, url) => {
         const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
         console.log(parsedHtml);
 
+        const feedsTitle = parsedHtml.querySelector('title').textContent;
+        const feedsDescription = parsedHtml.querySelector('description').textContent;
+        state.feeds.push({ feedsTitle, feedsDescription });
+        console.log(state.feeds);
+
         if (parsedHtml.querySelector('rss') === undefined || parsedHtml.querySelector('rss') === null) {
           console.log("parsedHtml.querySelector('rss') === null")
           throw new Error('Ресурс не содержит валидный RSS');
         }
-
-        // let parsedHtml;
-        // try {
-        //   parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
-        // }
-        // catch {
-        //   console.log('catch error - parsedHtml', error);
-        //   state.errors.push(error.code);
-        // }
 
         // console.log('parsedHtml', parsedHtml);
         parsedHtml.querySelectorAll('item').forEach((item) => {
