@@ -1,4 +1,5 @@
 import axios from 'axios';
+// app_1  |       - waiting for locator('text=Ресурс не содержит валидный RSS') 
 
 let idGenerator = 1;
 
@@ -7,17 +8,34 @@ const getRss = async (state, url) => {
   const urlWithApi = `${alloriginsApi}${url}`;
   await axios.get(urlWithApi)
     .then((response) => {
-      // if (response.status !== 200) state.errors.push(response.status);
+      console.log('проверка');
+      if (response.status !== 200) throw new Error('Ошибка сети');
       if (response.status === 200) {
-        console.log('response  = ', response);
-        console.log('response  = ', response.data);
-        console.log('response  = ', response.data.contents);
+        // console.log('response  = ', response);
+        // console.log('response  = ', response.data);
+        // console.log('response  = ', response.data.contents);
         const posts = [];
         // const xmlString = response.data;
         const parser = new DOMParser();
         // const parsedHtml = parser.parseFromString(xmlString, 'text/html');
         const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
-        console.log('parsedHtml', parsedHtml);
+        console.log(parsedHtml);
+
+        if (parsedHtml.querySelector('rss') === undefined || parsedHtml.querySelector('rss') === null) {
+          console.log("parsedHtml.querySelector('rss') === null")
+          throw new Error('Ресурс не содержит валидный RSS');
+        }
+
+        // let parsedHtml;
+        // try {
+        //   parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
+        // }
+        // catch {
+        //   console.log('catch error - parsedHtml', error);
+        //   state.errors.push(error.code);
+        // }
+
+        // console.log('parsedHtml', parsedHtml);
         parsedHtml.querySelectorAll('item').forEach((item) => {
           // console.log(item);
           let title;
@@ -48,7 +66,12 @@ const getRss = async (state, url) => {
     })
     .catch((error) => {
       console.log('catch error', error);
-      state.errors.push(error.code);
+      if (error.code === 'ERR_NETWORK') state.errors.push('Ошибка сети');
+      else state.errors.push('Ресурс не содержит валидный RSS');
+
+      // if (error === 'Ресурс не содержит валидный RSS') state.errors.push(error);
+      // else state.errors.push(error.code);
+      // state.errors.push(error);
     });
 };
 

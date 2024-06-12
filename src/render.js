@@ -137,7 +137,8 @@ const render = async (state, i18nInstance) => {
       console.log('state.errors-', state.errors);
       state.elements.urlExample.nextElementSibling.classList.remove('text-success');
       state.elements.urlExample.nextElementSibling.classList.add('text-danger');
-      state.elements.urlExample.nextElementSibling.textContent = `Ошибка сети (code: ${state.errors[0]})`;
+      // state.elements.urlExample.nextElementSibling.textContent = `Ошибка сети (code: ${state.errors[0]})`;
+      state.elements.urlExample.nextElementSibling.textContent = `${state.errors[0]}`;
       state.errors = [];
       return;
     }
