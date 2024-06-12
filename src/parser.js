@@ -6,7 +6,8 @@ let idGenerator = 1;
 const getRss = async (state, url) => {
   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
   const urlWithApi = `${alloriginsApi}${url}`;
-  await axios.get(urlWithApi)
+  // await axios.get(urlWithApi)
+  return axios.get(urlWithApi)
     .then((response) => {
       console.log('проверка');
       if (response.status !== 200) throw new Error('Ошибка сети');
