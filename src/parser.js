@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-let idGenerator = 1;
+import uniqueId from 'lodash/uniqueId.js';
 
 const getRss = async (state, url) => {
   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
@@ -23,27 +22,23 @@ const getRss = async (state, url) => {
 
         parsedHtml.querySelectorAll('item').forEach((item) => {
           const title = item.querySelector('title').textContent;
-          // const link = (item.querySelector('link').nextElementSibling); //  tag guid - wtf ???
+          // const link = (item.querySelector('link').nextElementSibling); //  tag guid - what ???
           const link = (item.querySelector('guid').textContent);
-          const id = idGenerator + 1;
+          const id = uniqueId();
           const description = item.querySelector('description').innerHTML;
-          idGenerator += 1;
           const obj = {
             title, link, id, description,
           };
           posts.push(obj);
         });
-        console.log(posts);
         return posts;
       }
       return null;
     })
     .then((posts) => {
       posts.forEach((el) => state.posts.push(el));
-      return null;
     })
     .catch((error) => {
-      console.log('catch error', error);
       if (error.code === 'ERR_NETWORK') state.errors.push('Ошибка сети');
       else state.errors.push('Ресурс не содержит валидный RSS');
     });

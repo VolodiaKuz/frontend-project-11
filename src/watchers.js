@@ -1,7 +1,5 @@
 import * as yup from 'yup';
 import onChange from 'on-change';
-// import { object, string } from 'yup';
-// import keyBy from 'lodash/keyBy.js';
 import keyBy from 'lodash/keyBy.js';
 
 const validate = (fields, state) => {

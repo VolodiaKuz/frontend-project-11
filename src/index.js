@@ -51,8 +51,4 @@ export default async () => {
     watchedState.form.fields.input = state.elements.input.value;
     render(state, i18nInstance);
   });
-
-  // state.elements.submitButton.addEventListener('submit', (e) => {
-  //   e.preventDefault();
-  // });
 };

@@ -1,6 +1,4 @@
-// import axios from 'axios';
 import getRss from './parser.js';
-// import updateRss from './updateRss.js';
 
 const closeModalDiv = () => {
   const modalDiv = document.querySelector('#modal');
