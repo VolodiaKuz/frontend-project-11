@@ -13,7 +13,6 @@ const closeModalDiv = () => {
 };
 
 const renderModalDialog = (post) => {
-  console.log('post', post);
   const modalDiv = document.querySelector('#modal');
   modalDiv.classList.add('show');
   modalDiv.setAttribute('style', 'display: block');
@@ -104,7 +103,6 @@ const renderPosts = (state, i18nInstance) => {
     feedsLi.classList.add('list-group-item', 'border-0', 'border-end-0');
     const feedsH3 = document.createElement('h3');
     feedsH3.classList.add('h6', 'm-0');
-    console.log('feed.title', feed.feedsTitle);
     feedsH3.textContent = feed.feedsTitle;
     const feedsParagraph = document.createElement('p');
     feedsParagraph.classList.add('m-0', 'small', 'text-black-50');
@@ -122,7 +120,6 @@ const renderPosts = (state, i18nInstance) => {
 };
 
 const render = async (state, i18nInstance) => {
-  // добавить состояние 'update' для проверки появления новых постов
   if (state.elements.input.value === '') return;
   if (state.rss.includes(state.elements.input.value)) {
     state.elements.urlExample.nextElementSibling.classList.remove('text-success');
@@ -135,10 +132,9 @@ const render = async (state, i18nInstance) => {
     state.rss.push(state.elements.input.value);
     await getRss(state, state.elements.input.value);
     if (state.errors.length !== 0) {
-      console.log('state.errors-', state.errors);
       state.elements.urlExample.nextElementSibling.classList.remove('text-success');
       state.elements.urlExample.nextElementSibling.classList.add('text-danger');
-      state.elements.urlExample.nextElementSibling.textContent = `${state.errors[0]}`;
+      state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.${state.errors[0]}`);
       state.errors = [];
       return;
     }

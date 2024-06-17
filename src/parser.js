@@ -6,7 +6,8 @@ const getRss = async (state, url) => {
   const urlWithApi = `${alloriginsApi}${url}`;
   await axios.get(urlWithApi)
     .then((response) => {
-      if (response.status !== 200) throw new Error('Ошибка сети');
+      // if (response.status !== 200) throw new Error('Ошибка сети');
+      if (response.status !== 200) throw new Error('networkError');
       if (response.status === 200) {
         const posts = [];
         const parser = new DOMParser();
@@ -17,7 +18,8 @@ const getRss = async (state, url) => {
 
         if (parsedHtml.querySelector('rss') === undefined || parsedHtml.querySelector('rss') === null) {
           console.log("parsedHtml.querySelector('rss') === null");
-          throw new Error('Ресурс не содержит валидный RSS');
+          // throw new Error('Ресурс не содержит валидный RSS');
+          throw new Error('invalidRss');
         }
 
         parsedHtml.querySelectorAll('item').forEach((item) => {
@@ -39,8 +41,10 @@ const getRss = async (state, url) => {
       posts.forEach((el) => state.posts.push(el));
     })
     .catch((error) => {
-      if (error.code === 'ERR_NETWORK') state.errors.push('Ошибка сети');
-      else state.errors.push('Ресурс не содержит валидный RSS');
+      // if (error.code === 'ERR_NETWORK') state.errors.push('Ошибка сети');
+      // else state.errors.push('Ресурс не содержит валидный RSS');
+      if (error.code === 'ERR_NETWORK') state.errors.push('networkError');
+      else state.errors.push('invalidRss');
     });
 };
 

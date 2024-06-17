@@ -7,7 +7,6 @@ Maintainability:
 [![Node%20CI](https://github.com/VolodiaKuz/frontend-project-11/actions/workflows/nodejs.yml/badge.svg)](https://github.com/VolodiaKuz/frontend-project-11/actions)
 
 ## About
-<br>
 Rss Reader is a service for aggregating RSS feeds, which makes it convenient to read a variety of sources, for example, blogs. It allows you to add an unlimited number of RSS feeds, updates and adds new entries to the general feed.
 
 RSS is a specialized format designed to describe news feeds, article announcements and other materials. This is the easiest way for sites (usually blogs) to allow users to subscribe to changes. 
