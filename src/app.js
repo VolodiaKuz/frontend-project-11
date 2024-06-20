@@ -21,14 +21,6 @@ const init = () => {
         input: '',
       },
     },
-    elements: {
-      form: document.querySelector('[rss-form="form"]'),
-      input: document.querySelector('[rss-form="input"]'),
-      submitButton: document.querySelector('[rss-form="button"]'),
-      urlExample: document.querySelector('#url-example'),
-      postsDiv: document.querySelector('.posts'),
-      feedsDiv: document.querySelector('.feeds'),
-    },
     postsUi: {
       watched: [],
     },
@@ -46,9 +38,18 @@ export default async () => {
     resources,
   });
 
-  state.elements.submitButton.addEventListener('click', (e) => {
+  const elements = {
+    form: document.querySelector('[rss-form="form"]'),
+    input: document.querySelector('[rss-form="input"]'),
+    submitButton: document.querySelector('[rss-form="button"]'),
+    urlExample: document.querySelector('#url-example'),
+    postsDiv: document.querySelector('.posts'),
+    feedsDiv: document.querySelector('.feeds'),
+  };
+
+  elements.submitButton.addEventListener('click', (e) => {
     e.preventDefault();
-    watchedState.form.fields.input = state.elements.input.value;
-    render(state, i18nInstance);
+    watchedState.form.fields.input = elements.input.value;
+    render(state, i18nInstance, elements);
   });
 };

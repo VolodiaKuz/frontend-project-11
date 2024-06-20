@@ -71,9 +71,9 @@ export const renderPosts = (state, posts, i18nInstance) => {
   });
 };
 
-const renderPostsContainer = (state, i18nInstance) => {
-  state.elements.postsDiv.innerHTML = '';
-  state.elements.feedsDiv.innerHTML = '';
+const renderPostsContainer = (state, i18nInstance, elements) => {
+  elements.postsDiv.innerHTML = '';
+  elements.feedsDiv.innerHTML = '';
 
   const postsDivCard = document.createElement('div');
   postsDivCard.classList.add('card', 'border-0');
@@ -84,7 +84,7 @@ const renderPostsContainer = (state, i18nInstance) => {
   postsHeader.textContent = i18nInstance.t('elements.posts');
   const postsUl = document.createElement('ul');
   postsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  state.elements.postsDiv.append(postsDivCard);
+  elements.postsDiv.append(postsDivCard);
   postsDivCard.append(postsDivCardBody);
   postsDivCardBody.append(postsHeader);
   postsDivCard.append(postsUl);
@@ -98,7 +98,7 @@ const renderPostsContainer = (state, i18nInstance) => {
   feedsHeader.textContent = i18nInstance.t('elements.feeds');
   const feedsUl = document.createElement('ul');
   feedsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  state.elements.feedsDiv.append(feedsDivCard);
+  elements.feedsDiv.append(feedsDivCard);
   feedsDivCard.append(feedsDivCardBody);
   feedsDivCardBody.append(feedsHeader);
   feedsDivCard.append(feedsUl);
@@ -119,33 +119,33 @@ const renderPostsContainer = (state, i18nInstance) => {
 
   renderPosts(state, state.posts, i18nInstance);
 
-  state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
-  state.elements.urlExample.nextElementSibling.classList.add('text-success');
-  state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t('rssInput.sucessfullyUploaded');
+  elements.urlExample.nextElementSibling.classList.remove('text-danger');
+  elements.urlExample.nextElementSibling.classList.add('text-success');
+  elements.urlExample.nextElementSibling.textContent = i18nInstance.t('rssInput.sucessfullyUploaded');
 };
 
-const render = async (state, i18nInstance) => {
-  if (state.elements.input.value === '') return;
-  if (state.rss.includes(state.elements.input.value)) {
-    state.elements.urlExample.nextElementSibling.classList.remove('text-success');
-    state.elements.urlExample.nextElementSibling.classList.add('text-danger');
-    state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t('rssInput.alreadyExist');
+const render = async (state, i18nInstance, elements) => {
+  if (elements.input.value === '') return;
+  if (state.rss.includes(elements.input.value)) {
+    elements.urlExample.nextElementSibling.classList.remove('text-success');
+    elements.urlExample.nextElementSibling.classList.add('text-danger');
+    elements.urlExample.nextElementSibling.textContent = i18nInstance.t('rssInput.alreadyExist');
     state.form.rssDuplication = false;
     return;
   }
   if (state.form.valid === true) {
-    state.rss.push(state.elements.input.value);
-    await getRss(state, state.elements.input.value);
+    state.rss.push(elements.input.value);
+    await getRss(state, elements.input.value);
     if (state.errors.length !== 0) {
-      state.elements.urlExample.nextElementSibling.classList.remove('text-success');
-      state.elements.urlExample.nextElementSibling.classList.add('text-danger');
-      state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.${state.errors[0]}`);
+      elements.urlExample.nextElementSibling.classList.remove('text-success');
+      elements.urlExample.nextElementSibling.classList.add('text-danger');
+      elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.${state.errors[0]}`);
       state.errors = [];
       return;
     }
-    renderPostsContainer(state, i18nInstance);
-    state.elements.form.reset();
-    state.elements.input.focus();
+    renderPostsContainer(state, i18nInstance, elements);
+    elements.form.reset();
+    elements.input.focus();
     state.form.valid = false;
 
     // let delay = 5000;
@@ -201,9 +201,9 @@ const render = async (state, i18nInstance) => {
   }
 
   if (state.form.valid === false) {
-    state.elements.urlExample.nextElementSibling.classList.remove('text-success');
-    state.elements.urlExample.nextElementSibling.classList.add('text-danger');
-    state.elements.urlExample.nextElementSibling.textContent = i18nInstance.t('rssInput.invalidUrl');
+    elements.urlExample.nextElementSibling.classList.remove('text-success');
+    elements.urlExample.nextElementSibling.classList.add('text-danger');
+    elements.urlExample.nextElementSibling.textContent = i18nInstance.t('rssInput.invalidUrl');
   }
 };
 
