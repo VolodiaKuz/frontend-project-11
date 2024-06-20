@@ -58,12 +58,15 @@ export const printPosts = (state, posts, i18nInstance) => {
     postsUl.append(li);
 
     button.addEventListener('click', () => {
-      // alert(post.title)
       renderModalDialog(post, i18nInstance);
-      a.classList.add('fw-normal');
+      a.classList.add('fw-normal', 'link-secondary');
       a.classList.remove('fw-bold');
       state.postsUi.watched.push(post.id); // добавить отображение просмотренных постов в UI
       console.log(state);
+    });
+    a.addEventListener('click', () => {
+      a.classList.add('fw-normal', 'link-secondary');
+      a.classList.remove('fw-bold');
     });
   });
 };
