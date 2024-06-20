@@ -7,5 +7,14 @@ export default {
       networkError: 'Ошибка сети',
       invalidRss: 'Ресурс не содержит валидный RSS',
     },
+    elements: {
+      button: 'Просмотр',
+      feeds: 'Фиды',
+      posts: 'Посты',
+    },
+    modal: {
+      close: 'Закрыть',
+      readAll: 'Читать полностью',
+    },
   },
 };

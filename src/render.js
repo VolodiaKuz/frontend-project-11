@@ -76,7 +76,7 @@ const renderPosts = (state, i18nInstance) => {
   postsDivCardBody.classList.add('card-body');
   const postsHeader = document.createElement('h2');
   postsHeader.classList.add('card-title', 'h4');
-  postsHeader.textContent = 'Посты';
+  postsHeader.textContent = i18nInstance.t('elements.posts');
   const postsUl = document.createElement('ul');
   postsUl.classList.add('list-group', 'border-0', 'rounded-0');
   state.elements.postsDiv.append(postsDivCard);
@@ -90,7 +90,7 @@ const renderPosts = (state, i18nInstance) => {
   feedsDivCardBody.classList.add('card-body');
   const feedsHeader = document.createElement('h2');
   feedsHeader.classList.add('card-title', 'h4');
-  feedsHeader.textContent = 'Фиды';
+  feedsHeader.textContent = i18nInstance.t('elements.feeds');
   const feedsUl = document.createElement('ul');
   feedsUl.classList.add('list-group', 'border-0', 'rounded-0');
   state.elements.feedsDiv.append(feedsDivCard);
