@@ -45,6 +45,7 @@ export default async () => {
     urlExample: document.querySelector('#url-example'),
     postsDiv: document.querySelector('.posts'),
     feedsDiv: document.querySelector('.feeds'),
+    modalDiv: document.querySelector('#modal'),
   };
 
   elements.submitButton.addEventListener('click', (e) => {

@@ -1,24 +1,23 @@
+// import { electron } from 'webpack';
 import getRss from './parser.js';
 
-const closeModalDiv = () => {
-  const modalDiv = document.querySelector('#modal');
-  modalDiv.classList.remove('show');
-  modalDiv.removeAttribute('style', 'display: block');
-  modalDiv.removeAttribute('aria-modal', 'true');
-  modalDiv.removeAttribute('role', 'dialog');
-  modalDiv.setAttribute('aria-hidden', 'true');
+const closeModalDiv = (elements) => {
+  elements.modalDiv.classList.remove('show');
+  elements.modalDiv.removeAttribute('style', 'display: block');
+  elements.modalDiv.removeAttribute('aria-modal', 'true');
+  elements.modalDiv.removeAttribute('role', 'dialog');
+  elements.modalDiv.setAttribute('aria-hidden', 'true');
   const body = document.querySelector('body');
   body.classList.remove('modal-open');
   body.removeAttribute('style');
 };
 
-const renderModalDialog = (post, i18nInstance) => {
-  const modalDiv = document.querySelector('#modal');
-  modalDiv.classList.add('show');
-  modalDiv.setAttribute('style', 'display: block');
-  modalDiv.setAttribute('aria-modal', 'true');
-  modalDiv.setAttribute('role', 'dialog');
-  modalDiv.removeAttribute('aria-hidden');
+const renderModalDialog = (post, i18nInstance, elements) => {
+  elements.modalDiv.classList.add('show');
+  elements.modalDiv.setAttribute('style', 'display: block');
+  elements.modalDiv.setAttribute('aria-modal', 'true');
+  elements.modalDiv.setAttribute('role', 'dialog');
+  elements.modalDiv.removeAttribute('aria-hidden');
   const body = document.querySelector('body');
   body.classList.add('modal-open');
   body.setAttribute('style', 'overflow: hidden; padding-right: 18px;');
@@ -30,15 +29,15 @@ const renderModalDialog = (post, i18nInstance) => {
   document.querySelector('#modal_close').textContent = i18nInstance.t('modal.close');
 
   document.querySelector('.modal-footer button').addEventListener('click', () => {
-    closeModalDiv();
+    closeModalDiv(elements);
   });
 
   document.querySelector('.modal-header button').addEventListener('click', () => {
-    closeModalDiv();
+    closeModalDiv(elements);
   });
 };
 
-export const renderPosts = (state, posts, i18nInstance) => {
+export const renderPosts = (state, posts, i18nInstance, elements) => {
   const postsUl = document.querySelector('.list-group');
   posts.forEach((post) => {
     const li = document.createElement('li');
@@ -58,7 +57,7 @@ export const renderPosts = (state, posts, i18nInstance) => {
     postsUl.append(li);
 
     button.addEventListener('click', () => {
-      renderModalDialog(post, i18nInstance);
+      renderModalDialog(post, i18nInstance, elements);
       a.classList.add('fw-normal', 'link-secondary');
       a.classList.remove('fw-bold');
       state.postsUi.watched.push(post.id); // добавить отображение просмотренных постов в UI
@@ -117,7 +116,7 @@ const renderPostsContainer = (state, i18nInstance, elements) => {
     feedsLi.append(feedsParagraph);
   });
 
-  renderPosts(state, state.posts, i18nInstance);
+  renderPosts(state, state.posts, i18nInstance, elements);
 
   elements.urlExample.nextElementSibling.classList.remove('text-danger');
   elements.urlExample.nextElementSibling.classList.add('text-success');
