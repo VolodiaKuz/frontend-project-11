@@ -14,3 +14,17 @@ RSS is a specialized format designed to describe news feeds, article announcemen
 Link to the deployed project on Vercel:
 <br>
 https://frontend-project-11-taupe-kappa.vercel.app
+
+## Installation
+```bash
+git clone https://github.com/VolodiaKuz/frontend-project-11.git
+cd frontend-project-11
+make install
+make develop
+```
+##
+
+## Example of using
+Paste RSS link to the field "Ссылка RSS"
+Press "Добавить" button
+##
