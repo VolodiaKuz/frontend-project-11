@@ -25,6 +25,5 @@ make develop
 ##
 
 ## Example of using
-Paste RSS link to the field "Ссылка RSS"
-Press "Добавить" button
+To upload RSS feeds paste RSS link to the field "Ссылка RSS" and press "Добавить" button
 ##
