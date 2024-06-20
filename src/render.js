@@ -38,7 +38,7 @@ const renderModalDialog = (post, i18nInstance) => {
   });
 };
 
-export const printPosts = (state, posts, i18nInstance) => {
+export const renderPosts = (state, posts, i18nInstance) => {
   const postsUl = document.querySelector('.list-group');
   posts.forEach((post) => {
     const li = document.createElement('li');
@@ -71,7 +71,7 @@ export const printPosts = (state, posts, i18nInstance) => {
   });
 };
 
-const renderPosts = (state, i18nInstance) => {
+const renderPostsContainer = (state, i18nInstance) => {
   state.elements.postsDiv.innerHTML = '';
   state.elements.feedsDiv.innerHTML = '';
 
@@ -117,7 +117,7 @@ const renderPosts = (state, i18nInstance) => {
     feedsLi.append(feedsParagraph);
   });
 
-  printPosts(state, state.posts, i18nInstance);
+  renderPosts(state, state.posts, i18nInstance);
 
   state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
   state.elements.urlExample.nextElementSibling.classList.add('text-success');
@@ -143,7 +143,7 @@ const render = async (state, i18nInstance) => {
       state.errors = [];
       return;
     }
-    renderPosts(state, i18nInstance);
+    renderPostsContainer(state, i18nInstance);
     state.elements.form.reset();
     state.elements.input.focus();
     state.form.valid = false;
@@ -184,7 +184,7 @@ const render = async (state, i18nInstance) => {
     //     .then((posts) => {
     //       console.log('new posts - ', posts);
     //       console.log('state.posts before concat', state.posts);
-    //       printPosts(state, posts);
+    //       renderPosts(state, posts);
     //       // state.posts.concat(posts);
     //       posts.forEach((el) => state.posts.push(el));
     //       console.log('state.posts after concat', state.posts);
