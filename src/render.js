@@ -38,7 +38,6 @@ const renderModalDialog = (post, i18nInstance, elements) => {
 };
 
 export const renderPosts = (state, posts, i18nInstance, elements) => {
-  const postsUl = document.querySelector('.list-group');
   posts.forEach((post) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
@@ -54,7 +53,7 @@ export const renderPosts = (state, posts, i18nInstance, elements) => {
     button.textContent = 'Просмотр';
     li.append(a);
     li.append(button);
-    postsUl.append(li);
+    elements.postsUl.append(li);
 
     button.addEventListener('click', () => {
       renderModalDialog(post, i18nInstance, elements);
@@ -82,6 +81,7 @@ const renderPostsContainer = (state, i18nInstance, elements) => {
   postsHeader.classList.add('card-title', 'h4');
   postsHeader.textContent = i18nInstance.t('elements.posts');
   const postsUl = document.createElement('ul');
+  elements.postsUl = postsUl;
   postsUl.classList.add('list-group', 'border-0', 'rounded-0');
   elements.postsDiv.append(postsDivCard);
   postsDivCard.append(postsDivCardBody);
