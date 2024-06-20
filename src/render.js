@@ -12,7 +12,7 @@ const closeModalDiv = () => {
   body.removeAttribute('style');
 };
 
-const renderModalDialog = (post) => {
+const renderModalDialog = (post, i18nInstance) => {
   const modalDiv = document.querySelector('#modal');
   modalDiv.classList.add('show');
   modalDiv.setAttribute('style', 'display: block');
@@ -26,6 +26,8 @@ const renderModalDialog = (post) => {
   document.querySelector('.modal-title').textContent = post.title;
   document.querySelector('.modal-body').textContent = post.description;
   document.querySelector('.modal-footer a').setAttribute('href', post.link);
+  document.querySelector('#modal_read_all').textContent = i18nInstance.t('modal.readAll');
+  document.querySelector('#modal_close').textContent = i18nInstance.t('modal.close');
 
   document.querySelector('.modal-footer button').addEventListener('click', () => {
     closeModalDiv();
@@ -36,7 +38,7 @@ const renderModalDialog = (post) => {
   });
 };
 
-export const printPosts = (state, posts) => {
+export const printPosts = (state, posts, i18nInstance) => {
   const postsUl = document.querySelector('.list-group');
   posts.forEach((post) => {
     const li = document.createElement('li');
@@ -57,7 +59,7 @@ export const printPosts = (state, posts) => {
 
     button.addEventListener('click', () => {
       // alert(post.title)
-      renderModalDialog(post);
+      renderModalDialog(post, i18nInstance);
       a.classList.add('fw-normal');
       a.classList.remove('fw-bold');
       state.postsUi.watched.push(post.id); // добавить отображение просмотренных постов в UI
@@ -112,7 +114,7 @@ const renderPosts = (state, i18nInstance) => {
     feedsLi.append(feedsParagraph);
   });
 
-  printPosts(state, state.posts);
+  printPosts(state, state.posts, i18nInstance);
 
   state.elements.urlExample.nextElementSibling.classList.remove('text-danger');
   state.elements.urlExample.nextElementSibling.classList.add('text-success');
