@@ -48,7 +48,7 @@ export default async () => {
     modalDiv: document.querySelector('#modal'),
   };
 
-  elements.submitButton.addEventListener('click', (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     watchedState.form.fields.input = elements.input.value;
     render(state, i18nInstance, elements);
