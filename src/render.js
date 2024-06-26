@@ -1,4 +1,4 @@
-// import axios from 'axios';
+import axios from 'axios';
 import getRss from './parser.js';
 
 const closeModalDiv = (elements) => {
@@ -151,57 +151,45 @@ const render = (state, i18nInstance, elements) => {
         state.form.valid = false;
       });
 
-    // let delay = 5000;
-    // let timerId = setTimeout(async function request() {
-    //   const newPosts = [];
-    //   const existPostsTitles = state.posts.map((post) => post.title);
-    //   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
-    //   const url = state.rss[0];
-    //   // const updateTime = '?unit=second&interval=2+length=3';
-    //   const updateTime = '?length=2';
-    //   const urlWithApi = `${alloriginsApi}${url}${updateTime}`;
-    //   await axios.get(urlWithApi)
-    //     .then(function (response) {
-    //       if (response.status === 200) {
-    //         const xmlString = response.data;
-    //         const parser = new DOMParser();
-    //         const parsedHtml = parser.parseFromString(xmlString, 'text/html');
-    //         // console.log('parsedHtml', parsedHtml);
-    //         parsedHtml.querySelectorAll('item').forEach((item) => {
-    //           // console.log(item);
-    //           // const title = /<!\[CDATA\[(.*?)\]\]>/g
-    //           //   .exec(item.querySelector('title').textContent)[1];
-    //           const title = item.querySelector('title').textContent;
-    //           if (!existPostsTitles.includes(title)) {
-    //             console.log('new title', title);
-    //             const link = (item.querySelector('guid').textContent);
-    //             // const description = /<!--\[CDATA\[(.*?)\]\]-->/g
-    //             //   .exec(item.querySelector('description').innerHTML)[1];
-    //             const description = item.querySelector('description').innerHTML;
-    //             const obj = { title, link, description };
-    //             console.log(obj);
-    //             newPosts.push(obj);
-    //           }
-    //         });
-    //         return newPosts;
-    //       }
-    //     })
-    //     .then((posts) => {
-    //       console.log('new posts - ', posts);
-    //       console.log('state.posts before concat', state.posts);
-    //       renderPosts(state, posts);
-    //       // state.posts.concat(posts);
-    //       posts.forEach((el) => state.posts.push(el));
-    //       console.log('state.posts after concat', state.posts);
-    //       // posts.forEach((el) => state.posts.push(el))
-    //     })
-    //     .catch((error) => {
-    //       console.log('catch error', error);
-    //       // state.errors.push(error.code)
-    //     });
-    //   timerId = setTimeout(request, delay);
-    // }, delay);
-
+    // в данный момент это тестовая реализации функции для проверки обновления постов
+    // если она работает правильно, я переделаю её на промисы и вынесу в отдельный модуль
+    const delay = 5000;
+    setTimeout(async function request() {
+      const newPosts = [];
+      const existPostsTitles = state.posts.map((post) => post.title);
+      const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
+      state.rss.forEach(async (url) => {
+        console.log('проверка ссылки RSS на наличие новых постов', url);
+        const urlWithApi = `${alloriginsApi}${url}`;
+        await axios.get(urlWithApi)
+          .then((response) => {
+            if (response.status === 200) {
+              const xmlString = response.data;
+              const parser = new DOMParser();
+              const parsedHtml = parser.parseFromString(xmlString, 'text/html');
+              parsedHtml.querySelectorAll('item').forEach((item) => { // проверка , что новых постов не добавилось
+                const title = item.querySelector('title').textContent;
+                if (!existPostsTitles.includes(title)) {
+                  const link = (item.querySelector('guid').textContent);
+                  const description = item.querySelector('description').innerHTML;
+                  const obj = { title, link, description };
+                  newPosts.push(obj);
+                }
+              });
+              return newPosts;
+            }
+            return null;
+          })
+          .then((posts) => {
+            posts.forEach((el) => state.posts.push(el));
+            renderPosts(state, posts);// если новые посты добавились - они пушатся в state.posts
+          })
+          .catch((error) => {
+            console.log('catch error', error);
+          });
+        setTimeout(request, delay);
+      });
+    }, delay);
     return;
   }
 
