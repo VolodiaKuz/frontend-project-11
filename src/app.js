@@ -28,16 +28,7 @@ const init = () => {
   return state;
 };
 
-export default async () => {
-  const state = init();
-  const watchedState = getWatchedState(state);
-  const i18nInstance = i18n.createInstance();
-  await i18nInstance.init({
-    lng: 'ru',
-    debug: false,
-    resources,
-  });
-
+export default () => {
   const elements = {
     form: document.querySelector('[rss-form="form"]'),
     input: document.querySelector('[rss-form="input"]'),
@@ -48,9 +39,19 @@ export default async () => {
     modalDiv: document.querySelector('#modal'),
   };
 
-  elements.form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    watchedState.form.fields.input = elements.input.value;
-    render(state, i18nInstance, elements);
-  });
+  const state = init();
+  const watchedState = getWatchedState(state);
+  const i18nInstance = i18n.createInstance();
+  i18nInstance.init({
+    lng: 'ru',
+    debug: false,
+    resources,
+  })
+    .then(() => {
+      elements.form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        watchedState.form.fields.input = elements.input.value;
+        render(state, i18nInstance, elements);
+      });
+    });
 };

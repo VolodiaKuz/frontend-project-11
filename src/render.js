@@ -1,4 +1,4 @@
-// import { electron } from 'webpack';
+// import axios from 'axios';
 import getRss from './parser.js';
 
 const closeModalDiv = (elements) => {
@@ -123,7 +123,7 @@ const renderPostsContainer = (state, i18nInstance, elements) => {
   elements.urlExample.nextElementSibling.textContent = i18nInstance.t('rssInput.sucessfullyUploaded');
 };
 
-const render = async (state, i18nInstance, elements) => {
+const render = (state, i18nInstance, elements) => {
   if (elements.input.value === '') return;
   if (state.rss.includes(elements.input.value)) {
     elements.urlExample.nextElementSibling.classList.remove('text-success');
@@ -134,24 +134,28 @@ const render = async (state, i18nInstance, elements) => {
   }
   if (state.form.valid === true) {
     state.rss.push(elements.input.value);
-    await getRss(state, elements.input.value);
-    if (state.errors.length !== 0) {
-      elements.urlExample.nextElementSibling.classList.remove('text-success');
-      elements.urlExample.nextElementSibling.classList.add('text-danger');
-      elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.${state.errors[0]}`);
-      state.errors = [];
-      return;
-    }
-    renderPostsContainer(state, i18nInstance, elements);
-    elements.form.reset();
-    elements.input.focus();
-    state.form.valid = false;
+
+    getRss(state, elements.input.value)
+      .then((posts) => {
+        posts.forEach((el) => state.posts.push(el));
+        if (state.errors.length !== 0) {
+          elements.urlExample.nextElementSibling.classList.remove('text-success');
+          elements.urlExample.nextElementSibling.classList.add('text-danger');
+          elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.${state.errors[0]}`);
+          state.errors = [];
+          return;
+        }
+        renderPostsContainer(state, i18nInstance, elements);
+        elements.form.reset();
+        elements.input.focus();
+        state.form.valid = false;
+      });
 
     // let delay = 5000;
     // let timerId = setTimeout(async function request() {
     //   const newPosts = [];
     //   const existPostsTitles = state.posts.map((post) => post.title);
-    //   const alloriginsApi = 'https://allorigins.hexlet.app/raw?url=';
+    //   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
     //   const url = state.rss[0];
     //   // const updateTime = '?unit=second&interval=2+length=3';
     //   const updateTime = '?length=2';
@@ -164,14 +168,16 @@ const render = async (state, i18nInstance, elements) => {
     //         const parsedHtml = parser.parseFromString(xmlString, 'text/html');
     //         // console.log('parsedHtml', parsedHtml);
     //         parsedHtml.querySelectorAll('item').forEach((item) => {
-    //           console.log(item);
-    //           const title = /<!\[CDATA\[(.*?)\]\]>/g
-    //             .exec(item.querySelector('title').textContent)[1];
+    //           // console.log(item);
+    //           // const title = /<!\[CDATA\[(.*?)\]\]>/g
+    //           //   .exec(item.querySelector('title').textContent)[1];
+    //           const title = item.querySelector('title').textContent;
     //           if (!existPostsTitles.includes(title)) {
     //             console.log('new title', title);
     //             const link = (item.querySelector('guid').textContent);
-    //             const description = /<!--\[CDATA\[(.*?)\]\]-->/g
-    //               .exec(item.querySelector('description').innerHTML)[1];
+    //             // const description = /<!--\[CDATA\[(.*?)\]\]-->/g
+    //             //   .exec(item.querySelector('description').innerHTML)[1];
+    //             const description = item.querySelector('description').innerHTML;
     //             const obj = { title, link, description };
     //             console.log(obj);
     //             newPosts.push(obj);
