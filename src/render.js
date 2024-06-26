@@ -137,7 +137,6 @@ const render = (state, i18nInstance, elements) => {
 
     getRss(state, elements.input.value)
       .then((posts) => {
-        posts.forEach((el) => state.posts.push(el));
         if (state.errors.length !== 0) {
           elements.urlExample.nextElementSibling.classList.remove('text-success');
           elements.urlExample.nextElementSibling.classList.add('text-danger');
@@ -145,6 +144,7 @@ const render = (state, i18nInstance, elements) => {
           state.errors = [];
           return;
         }
+        posts.forEach((el) => state.posts.push(el));
         renderPostsContainer(state, i18nInstance, elements);
         elements.form.reset();
         elements.input.focus();
