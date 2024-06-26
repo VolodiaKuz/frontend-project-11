@@ -15,6 +15,12 @@ Link to the deployed project on Vercel:
 <br>
 https://frontend-project-11-taupe-kappa.vercel.app
 
+## System requirements
+   <ul>
+      <li>node.js v21.0.0</li>
+      <li>npm v10.2.0</li>
+   </ul>
+
 ## Installation
 ```bash
 git clone https://github.com/VolodiaKuz/frontend-project-11.git
