@@ -59,7 +59,7 @@ export const renderPosts = (state, posts, i18nInstance, elements) => {
       renderModalDialog(post, i18nInstance, elements);
       a.classList.add('fw-normal', 'link-secondary');
       a.classList.remove('fw-bold');
-      state.postsUi.watched.push(post.id); // добавить отображение просмотренных постов в UI
+      state.postsUi.watched.push(post.id);
       console.log(state);
     });
     a.addEventListener('click', () => {
