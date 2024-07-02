@@ -154,14 +154,14 @@ const render = (state, i18nInstance, elements) => {
     // в данный момент это тестовая реализации функции для проверки обновления постов
     // если она работает правильно, я переделаю её на промисы и вынесу в отдельный модуль
     const delay = 5000;
-    setTimeout(async function request() {
+    setTimeout(function request() {
       const newPosts = [];
       const existPostsTitles = state.posts.map((post) => post.title);
       const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
-      state.rss.forEach(async (url) => {
+      state.rss.forEach((url) => {
         console.log('проверка ссылки RSS на наличие новых постов', url);
         const urlWithApi = `${alloriginsApi}${url}`;
-        await axios.get(urlWithApi)
+        axios.get(urlWithApi)
           .then((response) => {
             if (response.status === 200) {
               const xmlString = response.data;
