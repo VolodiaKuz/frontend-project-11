@@ -4,13 +4,17 @@ export default {
       sucessfullyUploaded: 'RSS sucessfully uploaded',
       alreadyExist: 'RSS already exist',
       invalidUrl: 'Link should be valid URL',
-      networkError: 'Ошибка сети',
-      invalidRss: 'Ресурс не содержит валидный RSS',
+      networkError: 'Network error',
+      invalidRss: 'The resource has no valid rss',
     },
     elements: {
-      button: 'Просмотр',
-      feeds: 'Фиды',
-      posts: 'Посты',
+      button: 'View',
+      feeds: 'Feeds',
+      posts: 'Posts',
+    },
+    modal: {
+      close: 'Close',
+      readAll: 'Read all',
     },
   },
 };
