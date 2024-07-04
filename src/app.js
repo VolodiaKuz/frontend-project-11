@@ -6,6 +6,7 @@ import resources from './locales/index.js';
 import {
   render,
 } from './render.js';
+import updateRss from './updateRss.js';
 
 const init = () => {
   const state = {
@@ -48,6 +49,7 @@ export default () => {
     resources,
   })
     .then(() => {
+      updateRss(state);
       elements.form.addEventListener('submit', (e) => {
         e.preventDefault();
         watchedState.form.fields.input = elements.input.value;
