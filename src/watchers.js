@@ -11,7 +11,7 @@ const validate = (fields, state) => {
       ),
   });
   try {
-    schema.validate(fields, { abortEarly: false });
+    schema.validateSync(fields, { abortEarly: false });
     return {};
   } catch (e) {
     return keyBy(e.inner, 'path');
