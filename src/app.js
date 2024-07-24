@@ -1,12 +1,11 @@
 import './styles.scss';
 import 'bootstrap';
 import i18n from 'i18next';
-import getWatchedState from './watchers.js';
+import * as yup from 'yup';
+import watch from './view.js';
 import resources from './locales/index.js';
-import {
-  render,
-} from './render.js';
 import updateRss from './updateRss.js';
+import getRss from './parser.js';
 
 const init = () => {
   const state = {
@@ -16,8 +15,9 @@ const init = () => {
     errors: [],
     url: '',
     form: {
+      status: 'filling',
       valid: true,
-      errors: {},
+      errors: null,
       fields: {
         input: '',
       },
@@ -41,7 +41,13 @@ export default () => {
   };
 
   const state = init();
-  const watchedState = getWatchedState(state);
+
+  const schema = yup.string().trim().required().url('invalidUrl')
+    .notOneOf(
+      [...state.rss, null],
+      'RSS уже существует',
+    );
+
   const i18nInstance = i18n.createInstance();
   i18nInstance.init({
     lng: 'ru',
@@ -49,11 +55,29 @@ export default () => {
     resources,
   })
     .then(() => {
-      updateRss(state);
+      const watchedState = watch(elements, i18nInstance, state);
+      updateRss(watchedState);
+
       elements.form.addEventListener('submit', (e) => {
         e.preventDefault();
-        watchedState.form.fields.input = elements.input.value;
-        render(state, i18nInstance, elements);
+
+        const rssUrl = elements.input.value;
+
+        schema.validate(rssUrl, { abortEarly: false })
+          .then(() => {
+            watchedState.form.status = 'valid';
+            watchedState.form.errors = null;
+            if (watchedState.rss.includes(rssUrl)) throw new Error('alreadyExist');
+            watchedState.rss.push(rssUrl);
+          })
+          .then(() => getRss(watchedState, rssUrl))
+          .then((posts) => posts.map((post) => post))
+          .then((posts) => watchedState.posts.push(...posts))
+          .catch((err) => {
+            watchedState.form.errors = [err.message];
+            watchedState.form.status = 'invalid';
+            console.log('err.message- ', err.message);
+          });
       });
     });
 };

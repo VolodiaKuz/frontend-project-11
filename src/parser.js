@@ -11,14 +11,15 @@ const getRss = (state, url) => {
         const posts = [];
         const parser = new DOMParser();
         const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
-        const feedsTitle = parsedHtml.querySelector('title').textContent;
-        const feedsDescription = parsedHtml.querySelector('description').textContent;
-        state.feeds.push({ feedsTitle, feedsDescription });
 
         if (parsedHtml.querySelector('rss') === undefined || parsedHtml.querySelector('rss') === null) {
           console.log("parsedHtml.querySelector('rss') === null");
           throw new Error('invalidRss');
         }
+
+        const feedsTitle = parsedHtml.querySelector('title').textContent;
+        const feedsDescription = parsedHtml.querySelector('description').textContent;
+        state.feeds.push({ feedsTitle, feedsDescription });
 
         parsedHtml.querySelectorAll('item').forEach((item) => {
           const title = item.querySelector('title').textContent;
@@ -36,8 +37,8 @@ const getRss = (state, url) => {
       return null;
     })
     .catch((error) => {
-      if (error.code === 'ERR_NETWORK') state.errors.push('networkError');
-      else state.errors.push('invalidRss');
+      if (error.code === 'ERR_NETWORK') throw new Error('networkError');
+      else throw new Error('invalidRss');
     });
 };
 
