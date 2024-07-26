@@ -22,7 +22,6 @@ const getRss = (state, url) => {
 
         parsedHtml.querySelectorAll('item').forEach((item) => {
           const title = item.querySelector('title').textContent;
-          // const link = (item.querySelector('link').nextElementSibling); //  tag guid - what ???
           const link = (item.querySelector('guid').textContent);
           const id = uniqueId();
           const description = item.querySelector('description').innerHTML;
