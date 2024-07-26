@@ -13,7 +13,6 @@ const getRss = (state, url) => {
         const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
 
         if (parsedHtml.querySelector('rss') === undefined || parsedHtml.querySelector('rss') === null) {
-          console.log("parsedHtml.querySelector('rss') === null");
           throw new Error('invalidRss');
         }
 

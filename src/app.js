@@ -12,8 +12,6 @@ const init = () => {
     rss: [],
     posts: [],
     feeds: [],
-    errors: [],
-    url: '',
     form: {
       status: 'filling',
       valid: true,
@@ -21,9 +19,6 @@ const init = () => {
       fields: {
         input: '',
       },
-    },
-    postsUi: {
-      watched: [],
     },
   };
   return state;
@@ -72,11 +67,13 @@ export default () => {
           })
           .then(() => getRss(watchedState, rssUrl))
           .then((posts) => posts.map((post) => post))
-          .then((posts) => watchedState.posts.push(...posts))
+          .then((posts) => {
+            watchedState.posts.push(...posts);
+            watchedState.form.status = 'submitted';
+          })
           .catch((err) => {
-            watchedState.form.errors = [err.message];
+            watchedState.form.errors = err.message;
             watchedState.form.status = 'invalid';
-            console.log('err.message- ', err.message);
           });
       });
     });

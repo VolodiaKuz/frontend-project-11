@@ -59,7 +59,6 @@ export const renderPosts = (state, posts, i18nInstance, elements) => {
       a.classList.add('fw-normal', 'link-secondary');
       a.classList.remove('fw-bold');
       state.postsUi.watched.push(post.id);
-      console.log(state);
     });
     a.addEventListener('click', () => {
       a.classList.add('fw-normal', 'link-secondary');

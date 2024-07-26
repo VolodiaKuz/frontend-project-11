@@ -1,9 +1,9 @@
 import onChange from 'on-change';
 
-const handleErrors = (state, errors, elements, i18nInstance) => {
+const handleErrors = (watchedState, errors, elements, i18nInstance) => {
   elements.urlExample.nextElementSibling.classList.remove('text-success');
   elements.urlExample.nextElementSibling.classList.add('text-danger');
-  elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.${errors[0]}`);
+  elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.${errors}`);
 };
 
 const closeModalDiv = (elements) => {
@@ -42,7 +42,7 @@ const renderModalDialog = (post, i18nInstance, elements) => {
   });
 };
 
-export const renderPosts = (state, posts, i18nInstance, elements) => {
+export const renderPosts = (watchedState, posts, i18nInstance, elements) => {
   posts.forEach((post) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
@@ -64,8 +64,6 @@ export const renderPosts = (state, posts, i18nInstance, elements) => {
       renderModalDialog(post, i18nInstance, elements);
       a.classList.add('fw-normal', 'link-secondary');
       a.classList.remove('fw-bold');
-      // state.postsUi.watched.push(post.id);
-      console.log(state);
     });
     a.addEventListener('click', () => {
       a.classList.add('fw-normal', 'link-secondary');
@@ -74,7 +72,7 @@ export const renderPosts = (state, posts, i18nInstance, elements) => {
   });
 };
 
-const renderPostsContainer = (state, i18nInstance, elements) => {
+const renderPostsContainer = (watchedState, i18nInstance, elements) => {
   elements.postsDiv.innerHTML = '';
   elements.feedsDiv.innerHTML = '';
 
@@ -107,7 +105,7 @@ const renderPostsContainer = (state, i18nInstance, elements) => {
   feedsDivCardBody.append(feedsHeader);
   feedsDivCard.append(feedsUl);
 
-  state.feeds.forEach((feed) => {
+  watchedState.feeds.forEach((feed) => {
     const feedsLi = document.createElement('li');
     feedsLi.classList.add('list-group-item', 'border-0', 'border-end-0');
     const feedsH3 = document.createElement('h3');
@@ -121,7 +119,7 @@ const renderPostsContainer = (state, i18nInstance, elements) => {
     feedsLi.append(feedsParagraph);
   });
 
-  renderPosts(state, state.posts, i18nInstance, elements);
+  renderPosts(watchedState, watchedState.posts, i18nInstance, elements);
 
   elements.urlExample.nextElementSibling.classList.remove('text-danger');
   elements.urlExample.nextElementSibling.classList.add('text-success');
@@ -131,34 +129,29 @@ const renderPostsContainer = (state, i18nInstance, elements) => {
 export default (elements, i18nInstance, state) => {
   const watchedState = onChange(state, (path) => {
     switch (path) {
-      // case 'form.errors':
-      //   console.log('case form.errors - ');
-      //   if (state.form.errors === null) break;
-      //   handleErrors(state, state.form.errors, elements, i18nInstance);
-      //   break;
-
       case 'form.status':
-        console.log('case form.status - ');
-        if (state.form.status === 'invalid') {
-          console.log('state.form.errors-', state.form.errors);
-          handleErrors(state, state.form.errors, elements, i18nInstance);
-        }
-        if (state.form.status === 'submitted') {
-          elements.form.reset();
-          elements.input.focus();
-        }
-        if (state.form.status === 'valid') {
-          // state.form.errors = null;
-          // во время ожидания ответа убираем ошибку
+        switch (state.form.status) {
+          case 'invalid':
+            handleErrors(state, state.form.errors, elements, i18nInstance);
+            break;
+
+          case 'submitted':
+            elements.form.reset();
+            elements.input.focus();
+            break;
+
+          case 'valid':
+            elements.urlExample.nextElementSibling.textContent = '';
+            break;
+
+          default:
+            break;
         }
         break;
 
       case 'posts':
-        console.log("case 'posts'");
-        console.log('state - ', state);
+        elements.urlExample.nextElementSibling.textContent = '';
         renderPostsContainer(state, i18nInstance, elements);
-        elements.form.reset();
-        elements.input.focus();
         break;
 
       default:

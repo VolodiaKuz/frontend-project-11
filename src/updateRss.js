@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { renderPosts } from './render.js';
+import { renderPosts } from './view.js';
 
 const delay = 5000;
 
-const updateRss = (state) => {
+const updateRss = (watchedState) => {
   const newPosts = [];
-  const existPostsTitles = state.posts.map((post) => post.title);
+  const existPostsTitles = watchedState.posts.map((post) => post.title);
   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
-  state.rss.forEach((url) => {
+  watchedState.rss.forEach((url) => {
     const urlWithApi = `${alloriginsApi}${url}`;
     axios.get(urlWithApi)
       .then((response) => {
@@ -29,14 +29,14 @@ const updateRss = (state) => {
         return null;
       })
       .then((posts) => {
-        posts.forEach((el) => state.posts.push(el));
-        renderPosts(state, posts);// если новые посты добавились - они пушатся в state.posts
+        posts.forEach((el) => watchedState.posts.push(el));
+        renderPosts(watchedState, posts);
       })
       .catch((error) => {
-        console.log('catch error', error);
+        watchedState.form.errors = error.message;
       });
   });
-  setTimeout(updateRss, delay, state);
+  setTimeout(updateRss, delay, watchedState);
 };
 
 export default updateRss;
