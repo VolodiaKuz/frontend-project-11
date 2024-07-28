@@ -93,34 +93,29 @@ const renderFeeds = (watchedState, elements) => {
   });
 };
 
-const createPostsContainer = (i18nInstance, elements, element) => {
-  const postsDivCard = document.createElement('div');
-  postsDivCard.classList.add('card', 'border-0');
-  const postsDivCardBody = document.createElement('div');
-  postsDivCardBody.classList.add('card-body');
-  const postsHeader = document.createElement('h2');
-  postsHeader.classList.add('card-title', 'h4');
-  postsHeader.textContent = i18nInstance.t('elements.posts'); /// zdes'
-  const postsUl = document.createElement('ul');
-  // elements.postsUl = postsUl;
-  elements[`${element}Ul`] = postsUl;
-  postsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  // elements.postsDiv.append(postsDivCard);
-  elements[`${element}Div`].append(postsDivCard);
-  postsDivCard.append(postsDivCardBody);
-  postsDivCardBody.append(postsHeader);
-  postsDivCard.append(postsUl);
+const renderContainer = (i18nInstance, elements, element) => {
+  const elementDivCard = document.createElement('div');
+  elementDivCard.classList.add('card', 'border-0');
+  const elementDivCardBody = document.createElement('div');
+  elementDivCardBody.classList.add('card-body');
+  const elementHeader = document.createElement('h2');
+  elementHeader.classList.add('card-title', 'h4');
+  elementHeader.textContent = i18nInstance.t('elements.posts');
+  const elementUl = document.createElement('ul');
+  elements[`${element}Ul`] = elementUl;
+  elementUl.classList.add('list-group', 'border-0', 'rounded-0');
+  elements[`${element}Div`].append(elementDivCard);
+  elementDivCard.append(elementDivCardBody);
+  elementDivCardBody.append(elementHeader);
+  elementDivCard.append(elementUl);
 };
 
 const render = (watchedState, i18nInstance, elements) => {
   elements.postsDiv.innerHTML = '';
   elements.feedsDiv.innerHTML = '';
 
-  createPostsContainer(i18nInstance, elements, 'posts');
-  createPostsContainer(i18nInstance, elements, 'feeds');
-  // createFeedsContainer(i18nInstance, elements);
-  // renderContainer(i18nInstance, elements, 'postsUl');
-  // renderContainer(i18nInstance, elements, 'feedsUl');
+  renderContainer(i18nInstance, elements, 'posts');
+  renderContainer(i18nInstance, elements, 'feeds');
 
   renderFeeds(watchedState, elements);
   renderPosts(watchedState.posts, i18nInstance, elements);
