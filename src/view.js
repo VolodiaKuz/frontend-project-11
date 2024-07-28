@@ -42,15 +42,20 @@ const renderModalDialog = (post, i18nInstance, elements) => {
   });
 };
 
+const createPostsLink = (post) => {
+  const a = document.createElement('a');
+  a.setAttribute('href', post.link);
+  a.setAttribute('target', '_blank');
+  a.setAttribute('data-id', post.id);
+  a.classList.add('fw-bold');
+  return a;
+};
+
 export const renderPosts = (watchedState, posts, i18nInstance, elements) => {
   posts.forEach((post) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-    const a = document.createElement('a');
-    a.setAttribute('href', post.link);
-    a.setAttribute('target', '_blank');
-    a.setAttribute('data-id', post.id);
-    a.classList.add('fw-bold');
+    const a = createPostsLink(post);
     a.textContent = post.title;
     const button = document.createElement('button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
