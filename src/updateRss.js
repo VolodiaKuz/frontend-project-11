@@ -1,7 +1,23 @@
 import axios from 'axios';
 import { renderPosts } from './view.js';
 
-const delay = 5000;
+const UpdateDelay = 5000;
+
+const parseResponse = (response, newPosts, existPostsTitles) => {
+  const xmlString = response.data;
+  const parser = new DOMParser();
+  const parsedHtml = parser.parseFromString(xmlString, 'text/html');
+  parsedHtml.querySelectorAll('item').forEach((item) => { // проверка , что новых постов не добавилось
+    const title = item.querySelector('title').textContent;
+    if (!existPostsTitles.includes(title)) {
+      const link = (item.querySelector('guid').textContent);
+      const description = item.querySelector('description').innerHTML;
+      const obj = { title, link, description };
+      newPosts.push(obj);
+    }
+  });
+  return newPosts;
+};
 
 const updateRss = (watchedState) => {
   const newPosts = [];
@@ -12,19 +28,7 @@ const updateRss = (watchedState) => {
     axios.get(urlWithApi)
       .then((response) => {
         if (response.status === 200) {
-          const xmlString = response.data;
-          const parser = new DOMParser();
-          const parsedHtml = parser.parseFromString(xmlString, 'text/html');
-          parsedHtml.querySelectorAll('item').forEach((item) => { // проверка , что новых постов не добавилось
-            const title = item.querySelector('title').textContent;
-            if (!existPostsTitles.includes(title)) {
-              const link = (item.querySelector('guid').textContent);
-              const description = item.querySelector('description').innerHTML;
-              const obj = { title, link, description };
-              newPosts.push(obj);
-            }
-          });
-          return newPosts;
+          return parseResponse(response, newPosts, existPostsTitles);
         }
         return null;
       })
@@ -36,7 +40,7 @@ const updateRss = (watchedState) => {
         watchedState.form.errors = error.message;
       });
   });
-  setTimeout(updateRss, delay, watchedState);
+  setTimeout(updateRss, UpdateDelay, watchedState);
 };
 
 export default updateRss;
