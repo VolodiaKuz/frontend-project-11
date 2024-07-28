@@ -51,7 +51,7 @@ const createPostsLink = (post) => {
   return a;
 };
 
-export const renderPosts = (watchedState, posts, i18nInstance, elements) => {
+export const renderPosts = (posts, i18nInstance, elements) => {
   posts.forEach((post) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
@@ -133,9 +133,11 @@ const render = (watchedState, i18nInstance, elements) => {
 
   createPostsContainer(i18nInstance, elements);
   createFeedsContainer(i18nInstance, elements);
+  // renderContainer(i18nInstance, elements, 'postsUl');
+  // renderContainer(i18nInstance, elements, 'feedsUl');
 
   renderFeeds(watchedState, elements);
-  renderPosts(watchedState, watchedState.posts, i18nInstance, elements);
+  renderPosts(watchedState.posts, i18nInstance, elements);
 
   elements.urlExample.nextElementSibling.classList.remove('text-danger');
   elements.urlExample.nextElementSibling.classList.add('text-success');

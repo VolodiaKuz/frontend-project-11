@@ -37,11 +37,7 @@ export default () => {
 
   const state = init();
 
-  const schema = yup.string().trim().required().url('invalidUrl')
-    .notOneOf(
-      [...state.rss, null],
-      'RSS уже существует',
-    );
+  const schema = yup.string().trim().required().url('invalidUrl');
 
   const i18nInstance = i18n.createInstance();
   i18nInstance.init({
@@ -51,7 +47,7 @@ export default () => {
   })
     .then(() => {
       const watchedState = watch(elements, i18nInstance, state);
-      updateRss(watchedState);
+      updateRss(watchedState, i18nInstance, elements);
 
       elements.form.addEventListener('submit', (e) => {
         e.preventDefault();

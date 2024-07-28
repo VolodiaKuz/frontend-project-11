@@ -19,7 +19,7 @@ const parseResponse = (response, newPosts, existPostsTitles) => {
   return newPosts;
 };
 
-const updateRss = (watchedState) => {
+const updateRss = (watchedState, i18nInstance, elements) => {
   const newPosts = [];
   const existPostsTitles = watchedState.posts.map((post) => post.title);
   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
@@ -34,7 +34,7 @@ const updateRss = (watchedState) => {
       })
       .then((posts) => {
         posts.forEach((el) => watchedState.posts.push(el));
-        renderPosts(watchedState, posts);
+        renderPosts(posts, i18nInstance, elements);
       })
       .catch((error) => {
         watchedState.form.errors = error.message;
