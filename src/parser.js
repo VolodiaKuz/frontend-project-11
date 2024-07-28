@@ -1,6 +1,19 @@
 import axios from 'axios';
 import uniqueId from 'lodash/uniqueId.js';
 
+const extractPosts = (posts, parsedHtml) => {
+  parsedHtml.querySelectorAll('item').forEach((item) => {
+    const title = item.querySelector('title').textContent;
+    const link = (item.querySelector('guid').textContent);
+    const id = uniqueId();
+    const description = item.querySelector('description').innerHTML;
+    const obj = {
+      title, link, id, description,
+    };
+    posts.push(obj);
+  });
+};
+
 const getRss = (state, url) => {
   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
   const urlWithApi = `${alloriginsApi}${url}`;
@@ -20,16 +33,7 @@ const getRss = (state, url) => {
         const feedsDescription = parsedHtml.querySelector('description').textContent;
         state.feeds.push({ feedsTitle, feedsDescription });
 
-        parsedHtml.querySelectorAll('item').forEach((item) => {
-          const title = item.querySelector('title').textContent;
-          const link = (item.querySelector('guid').textContent);
-          const id = uniqueId();
-          const description = item.querySelector('description').innerHTML;
-          const obj = {
-            title, link, id, description,
-          };
-          posts.push(obj);
-        });
+        extractPosts(posts, parsedHtml);
         return posts;
       }
       return null;
