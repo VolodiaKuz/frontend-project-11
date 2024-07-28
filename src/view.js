@@ -93,46 +93,32 @@ const renderFeeds = (watchedState, elements) => {
   });
 };
 
-const createPostsContainer = (i18nInstance, elements) => {
+const createPostsContainer = (i18nInstance, elements, element) => {
   const postsDivCard = document.createElement('div');
   postsDivCard.classList.add('card', 'border-0');
   const postsDivCardBody = document.createElement('div');
   postsDivCardBody.classList.add('card-body');
   const postsHeader = document.createElement('h2');
   postsHeader.classList.add('card-title', 'h4');
-  postsHeader.textContent = i18nInstance.t('elements.posts');
+  postsHeader.textContent = i18nInstance.t('elements.posts'); /// zdes'
   const postsUl = document.createElement('ul');
-  elements.postsUl = postsUl;
+  // elements.postsUl = postsUl;
+  elements[`${element}Ul`] = postsUl;
   postsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  elements.postsDiv.append(postsDivCard);
+  // elements.postsDiv.append(postsDivCard);
+  elements[`${element}Div`].append(postsDivCard);
   postsDivCard.append(postsDivCardBody);
   postsDivCardBody.append(postsHeader);
   postsDivCard.append(postsUl);
-};
-
-const createFeedsContainer = (i18nInstance, elements) => {
-  const feedsDivCard = document.createElement('div');
-  feedsDivCard.classList.add('card', 'border-0');
-  const feedsDivCardBody = document.createElement('div');
-  feedsDivCardBody.classList.add('card-body');
-  const feedsHeader = document.createElement('h2');
-  feedsHeader.classList.add('card-title', 'h4');
-  feedsHeader.textContent = i18nInstance.t('elements.feeds');
-  const feedsUl = document.createElement('ul');
-  elements.feedsUl = feedsUl;
-  feedsUl.classList.add('list-group', 'border-0', 'rounded-0');
-  elements.feedsDiv.append(feedsDivCard);
-  feedsDivCard.append(feedsDivCardBody);
-  feedsDivCardBody.append(feedsHeader);
-  feedsDivCard.append(feedsUl);
 };
 
 const render = (watchedState, i18nInstance, elements) => {
   elements.postsDiv.innerHTML = '';
   elements.feedsDiv.innerHTML = '';
 
-  createPostsContainer(i18nInstance, elements);
-  createFeedsContainer(i18nInstance, elements);
+  createPostsContainer(i18nInstance, elements, 'posts');
+  createPostsContainer(i18nInstance, elements, 'feeds');
+  // createFeedsContainer(i18nInstance, elements);
   // renderContainer(i18nInstance, elements, 'postsUl');
   // renderContainer(i18nInstance, elements, 'feedsUl');
 
