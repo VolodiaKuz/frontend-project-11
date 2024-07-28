@@ -72,10 +72,23 @@ export const renderPosts = (watchedState, posts, i18nInstance, elements) => {
   });
 };
 
-const renderPostsContainer = (watchedState, i18nInstance, elements) => {
-  elements.postsDiv.innerHTML = '';
-  elements.feedsDiv.innerHTML = '';
+const renderFeeds = (watchedState, elements) => {
+  watchedState.feeds.forEach((feed) => {
+    const feedsLi = document.createElement('li');
+    feedsLi.classList.add('list-group-item', 'border-0', 'border-end-0');
+    const feedsH3 = document.createElement('h3');
+    feedsH3.classList.add('h6', 'm-0');
+    feedsH3.textContent = feed.feedsTitle;
+    const feedsParagraph = document.createElement('p');
+    feedsParagraph.classList.add('m-0', 'small', 'text-black-50');
+    feedsParagraph.textContent = feed.feedsDescription;
+    elements.feedsUl.prepend(feedsLi);
+    feedsLi.append(feedsH3);
+    feedsLi.append(feedsParagraph);
+  });
+};
 
+const createPostsContainer = (i18nInstance, elements) => {
   const postsDivCard = document.createElement('div');
   postsDivCard.classList.add('card', 'border-0');
   const postsDivCardBody = document.createElement('div');
@@ -90,7 +103,9 @@ const renderPostsContainer = (watchedState, i18nInstance, elements) => {
   postsDivCard.append(postsDivCardBody);
   postsDivCardBody.append(postsHeader);
   postsDivCard.append(postsUl);
+};
 
+const createFeedsContainer = (i18nInstance, elements) => {
   const feedsDivCard = document.createElement('div');
   feedsDivCard.classList.add('card', 'border-0');
   const feedsDivCardBody = document.createElement('div');
@@ -99,26 +114,22 @@ const renderPostsContainer = (watchedState, i18nInstance, elements) => {
   feedsHeader.classList.add('card-title', 'h4');
   feedsHeader.textContent = i18nInstance.t('elements.feeds');
   const feedsUl = document.createElement('ul');
+  elements.feedsUl = feedsUl;
   feedsUl.classList.add('list-group', 'border-0', 'rounded-0');
   elements.feedsDiv.append(feedsDivCard);
   feedsDivCard.append(feedsDivCardBody);
   feedsDivCardBody.append(feedsHeader);
   feedsDivCard.append(feedsUl);
+};
 
-  watchedState.feeds.forEach((feed) => {
-    const feedsLi = document.createElement('li');
-    feedsLi.classList.add('list-group-item', 'border-0', 'border-end-0');
-    const feedsH3 = document.createElement('h3');
-    feedsH3.classList.add('h6', 'm-0');
-    feedsH3.textContent = feed.feedsTitle;
-    const feedsParagraph = document.createElement('p');
-    feedsParagraph.classList.add('m-0', 'small', 'text-black-50');
-    feedsParagraph.textContent = feed.feedsDescription;
-    feedsUl.prepend(feedsLi);
-    feedsLi.append(feedsH3);
-    feedsLi.append(feedsParagraph);
-  });
+const render = (watchedState, i18nInstance, elements) => {
+  elements.postsDiv.innerHTML = '';
+  elements.feedsDiv.innerHTML = '';
 
+  createPostsContainer(i18nInstance, elements);
+  createFeedsContainer(i18nInstance, elements);
+
+  renderFeeds(watchedState, elements);
   renderPosts(watchedState, watchedState.posts, i18nInstance, elements);
 
   elements.urlExample.nextElementSibling.classList.remove('text-danger');
@@ -151,7 +162,7 @@ export default (elements, i18nInstance, state) => {
 
       case 'posts':
         elements.urlExample.nextElementSibling.textContent = '';
-        renderPostsContainer(state, i18nInstance, elements);
+        render(state, i18nInstance, elements);
         break;
 
       default:
