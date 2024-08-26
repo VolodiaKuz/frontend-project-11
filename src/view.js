@@ -27,17 +27,17 @@ const renderModalDialog = (post, i18nInstance, elements) => {
   body.classList.add('modal-open');
   body.setAttribute('style', 'overflow: hidden; padding-right: 18px;');
 
-  document.querySelector('.modal-title').textContent = post.title;
-  document.querySelector('.modal-body').textContent = post.description;
-  document.querySelector('.modal-footer a').setAttribute('href', post.link);
-  document.querySelector('#modal_read_all').textContent = i18nInstance.t('modal.readAll');
-  document.querySelector('#modal_close').textContent = i18nInstance.t('modal.close');
+  elements.modalDiv.querySelector('.modal-title').textContent = post.title;
+  elements.modalDiv.querySelector('.modal-body').textContent = post.description;
+  elements.modalDiv.querySelector('.modal-footer a').setAttribute('href', post.link);
+  elements.modalDiv.querySelector('#modal_read_all').textContent = i18nInstance.t('modal.readAll');
+  elements.modalDiv.querySelector('#modal_close').textContent = i18nInstance.t('modal.close');
 
-  document.querySelector('.modal-footer button').addEventListener('click', () => {
+  elements.modalDiv.querySelector('.modal-footer button').addEventListener('click', () => {
     closeModalDiv(elements);
   });
 
-  document.querySelector('.modal-header button').addEventListener('click', () => {
+  elements.modalDiv.querySelector('.modal-header button').addEventListener('click', () => {
     closeModalDiv(elements);
   });
 };

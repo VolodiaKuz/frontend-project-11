@@ -7,22 +7,19 @@ import resources from './locales/index.js';
 import updateRss from './updateRss.js';
 import getRss from './parser.js';
 
-const init = () => {
-  const state = {
-    rss: [],
-    posts: [],
-    feeds: [],
-    form: {
-      status: 'filling',
-      valid: true,
-      errors: null,
-      fields: {
-        input: '',
-      },
+const init = () => ({
+  rss: [],
+  posts: [],
+  feeds: [],
+  form: {
+    status: 'filling',
+    valid: true,
+    errors: null,
+    fields: {
+      input: '',
     },
-  };
-  return state;
-};
+  },
+});
 
 export default () => {
   const elements = {
@@ -62,7 +59,6 @@ export default () => {
             watchedState.rss.push(rssUrl);
           })
           .then(() => getRss(watchedState, rssUrl))
-          .then((posts) => posts.map((post) => post))
           .then((posts) => {
             watchedState.posts.push(...posts);
             watchedState.form.status = 'submitted';
