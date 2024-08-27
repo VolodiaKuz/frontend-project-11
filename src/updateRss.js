@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { renderPosts } from './view.js';
 
 const updateDelay = 5000;
 
@@ -20,7 +19,7 @@ const parseResponse = (response, existPostsTitles) => {
   return newPosts;
 };
 
-const updateRss = (watchedState, i18nInstance, elements) => {
+const updateRss = (watchedState) => {
   const existPostsTitles = watchedState.posts.map((post) => post.title);
   const alloriginsApi = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
   watchedState.rss.forEach((url) => {
@@ -33,8 +32,7 @@ const updateRss = (watchedState, i18nInstance, elements) => {
         return null;
       })
       .then((posts) => {
-        posts.forEach((el) => watchedState.posts.push(el));
-        renderPosts(posts, i18nInstance, elements);
+        watchedState.posts.push(...posts);
       })
       .catch((error) => {
         watchedState.form.errors = error.message;

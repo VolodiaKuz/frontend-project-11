@@ -25,8 +25,9 @@ const getRss = (state, url) => {
       if (response.status === 200) {
         const parser = new DOMParser();
         const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
+        const rssValue = parsedHtml.querySelector('rss');
 
-        if (parsedHtml.querySelector('rss') === undefined || parsedHtml.querySelector('rss') === null) {
+        if (!rssValue) {
           throw new Error('invalidRss');
         }
 

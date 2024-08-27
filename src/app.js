@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import watch from './view.js';
 import resources from './locales/index.js';
 import updateRss from './updateRss.js';
-import getRss from './parser.js';
+import getRss from './utils.js';
 
 const init = () => ({
   rss: [],
@@ -54,7 +54,7 @@ export default () => {
 
         schema.validate(rssUrl, { abortEarly: false })
           .then(() => {
-            watchedState.form.status = 'valid';
+            watchedState.form.status = 'valid'; // возможно здесь нужно очищать поле фидбэк
             watchedState.form.errors = null;
             if (watchedState.rss.includes(rssUrl)) throw new Error('alreadyExist');
             watchedState.rss.push(rssUrl);
