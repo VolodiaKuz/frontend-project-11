@@ -27,7 +27,7 @@ const updateRss = (watchedState) => {
     axios.get(urlWithApi)
       .then((response) => parseResponse(response, existPostsTitles))
       .then((posts) => {
-        watchedState.posts.push(...posts);
+        if (posts.length !== 0) watchedState.posts.push(...posts);
       })
       .catch((error) => {
         watchedState.form.errors = error.message;
