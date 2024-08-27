@@ -21,23 +21,19 @@ const getRss = (state, url) => {
   const urlWithApi = `${alloriginsApi}${url}`;
   return axios.get(urlWithApi)
     .then((response) => {
-      if (response.status !== 200) throw new Error('networkError');
-      if (response.status === 200) {
-        const parser = new DOMParser();
-        const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
-        const rssValue = parsedHtml.querySelector('rss');
+      const parser = new DOMParser();
+      const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
+      const rssValue = parsedHtml.querySelector('rss');
 
-        if (!rssValue) {
-          throw new Error('invalidRss');
-        }
-
-        const feedsTitle = parsedHtml.querySelector('title').textContent;
-        const feedsDescription = parsedHtml.querySelector('description').textContent;
-        state.feeds.push({ feedsTitle, feedsDescription });
-
-        return extractPosts(parsedHtml);
+      if (!rssValue) {
+        throw new Error('invalidRss');
       }
-      return null;
+
+      const feedsTitle = parsedHtml.querySelector('title').textContent;
+      const feedsDescription = parsedHtml.querySelector('description').textContent;
+      state.feeds.push({ feedsTitle, feedsDescription });
+
+      return extractPosts(parsedHtml);
     })
     .catch((error) => {
       if (error.code === 'ERR_NETWORK') throw new Error('networkError');

@@ -25,12 +25,7 @@ const updateRss = (watchedState) => {
   watchedState.rss.forEach((url) => {
     const urlWithApi = `${alloriginsApi}${url}`;
     axios.get(urlWithApi)
-      .then((response) => {
-        if (response.status === 200) {
-          return parseResponse(response, existPostsTitles);
-        }
-        return null;
-      })
+      .then((response) => parseResponse(response, existPostsTitles))
       .then((posts) => {
         watchedState.posts.push(...posts);
       })
