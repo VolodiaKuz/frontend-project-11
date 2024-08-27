@@ -1,7 +1,8 @@
 import axios from 'axios';
 import uniqueId from 'lodash/uniqueId.js';
 
-const extractPosts = (posts, parsedHtml) => {
+const extractPosts = (parsedHtml) => {
+  const posts = [];
   parsedHtml.querySelectorAll('item').forEach((item) => {
     const title = item.querySelector('title').textContent;
     const link = (item.querySelector('guid').textContent);
@@ -12,6 +13,7 @@ const extractPosts = (posts, parsedHtml) => {
     };
     posts.push(obj);
   });
+  return posts;
 };
 
 const getRss = (state, url) => {
@@ -21,7 +23,6 @@ const getRss = (state, url) => {
     .then((response) => {
       if (response.status !== 200) throw new Error('networkError');
       if (response.status === 200) {
-        const posts = [];
         const parser = new DOMParser();
         const parsedHtml = parser.parseFromString(response.data.contents, 'text/html');
 
@@ -33,8 +34,7 @@ const getRss = (state, url) => {
         const feedsDescription = parsedHtml.querySelector('description').textContent;
         state.feeds.push({ feedsTitle, feedsDescription });
 
-        extractPosts(posts, parsedHtml);
-        return posts;
+        return extractPosts(parsedHtml);
       }
       return null;
     })

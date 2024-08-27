@@ -1,6 +1,6 @@
 import onChange from 'on-change';
 
-const handleErrors = (watchedState, errors, elements, i18nInstance) => {
+const handleErrors = (errors, elements, i18nInstance) => {
   elements.feedback.classList.remove('text-success');
   elements.feedback.classList.add('text-danger');
   elements.feedback.textContent = i18nInstance.t(`rssInput.${errors}`);
@@ -60,7 +60,7 @@ export const renderPosts = (posts, i18nInstance, elements) => {
     const button = document.createElement('button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     button.setAttribute('data-id', post.id);
-    button.textContent = 'Просмотр';
+    button.textContent = i18nInstance.t('elements.readButton');
     li.append(a);
     li.append(button);
     elements.postsUl.append(li);
@@ -113,6 +113,7 @@ const renderContainer = (i18nInstance, elements, element) => {
 const render = (watchedState, i18nInstance, elements) => {
   elements.postsDiv.innerHTML = '';
   elements.feedsDiv.innerHTML = '';
+  elements.feedback.textContent = '';
 
   renderContainer(i18nInstance, elements, 'posts');
   renderContainer(i18nInstance, elements, 'feeds');
@@ -131,7 +132,7 @@ export default (elements, i18nInstance, state) => {
       case 'form.status':
         switch (state.form.status) {
           case 'invalid':
-            handleErrors(state, state.form.errors, elements, i18nInstance);
+            handleErrors(state.form.errors, elements, i18nInstance);
             break;
 
           case 'submitted':
@@ -149,7 +150,6 @@ export default (elements, i18nInstance, state) => {
         break;
 
       case 'posts':
-        elements.feedback.textContent = '';
         render(state, i18nInstance, elements);
         break;
 

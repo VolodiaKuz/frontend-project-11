@@ -8,7 +8,7 @@ export default {
       invalidRss: 'Ресурс не содержит валидный RSS',
     },
     elements: {
-      button: 'Просмотр',
+      readButton: 'Просмотр',
       feeds: 'Фиды',
       posts: 'Посты',
     },
