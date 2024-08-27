@@ -51,16 +51,18 @@ export default () => {
         e.preventDefault();
 
         const rssUrl = elements.input.value;
+        watchedState.form.errors = null;
+        watchedState.form.status = 'valid';
 
         schema.validate(rssUrl, { abortEarly: false })
           .then(() => {
-            watchedState.form.status = 'valid'; // возможно здесь нужно очищать поле фидбэк
-            watchedState.form.errors = null;
-            if (watchedState.rss.includes(rssUrl)) throw new Error('alreadyExist');
-            watchedState.rss.push(rssUrl);
+            if (watchedState.rss.includes(rssUrl)) {
+              throw new Error('alreadyExist');
+            }
           })
           .then(() => getRss(watchedState, rssUrl))
           .then((posts) => {
+            watchedState.rss.push(rssUrl);
             watchedState.posts.push(...posts);
             watchedState.form.status = 'submitted';
           })
