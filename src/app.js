@@ -30,6 +30,7 @@ export default () => {
     postsDiv: document.querySelector('.posts'),
     feedsDiv: document.querySelector('.feeds'),
     modalDiv: document.querySelector('#modal'),
+    feedback: document.querySelector('.feedback'),
   };
 
   const state = init();

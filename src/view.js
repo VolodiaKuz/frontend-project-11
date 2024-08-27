@@ -1,9 +1,9 @@
 import onChange from 'on-change';
 
 const handleErrors = (watchedState, errors, elements, i18nInstance) => {
-  elements.urlExample.nextElementSibling.classList.remove('text-success');
-  elements.urlExample.nextElementSibling.classList.add('text-danger');
-  elements.urlExample.nextElementSibling.textContent = i18nInstance.t(`rssInput.${errors}`);
+  elements.feedback.classList.remove('text-success');
+  elements.feedback.classList.add('text-danger');
+  elements.feedback.textContent = i18nInstance.t(`rssInput.${errors}`);
 };
 
 const closeModalDiv = (elements) => {
@@ -120,9 +120,9 @@ const render = (watchedState, i18nInstance, elements) => {
   renderFeeds(watchedState, elements);
   renderPosts(watchedState.posts, i18nInstance, elements);
 
-  elements.urlExample.nextElementSibling.classList.remove('text-danger');
-  elements.urlExample.nextElementSibling.classList.add('text-success');
-  elements.urlExample.nextElementSibling.textContent = i18nInstance.t('rssInput.sucessfullyUploaded');
+  elements.feedback.classList.remove('text-danger');
+  elements.feedback.classList.add('text-success');
+  elements.feedback.textContent = i18nInstance.t('rssInput.sucessfullyUploaded');
 };
 
 export default (elements, i18nInstance, state) => {
@@ -140,7 +140,7 @@ export default (elements, i18nInstance, state) => {
             break;
 
           case 'valid':
-            elements.urlExample.nextElementSibling.textContent = '';
+            elements.feedback.textContent = '';
             break;
 
           default:
@@ -149,7 +149,7 @@ export default (elements, i18nInstance, state) => {
         break;
 
       case 'posts':
-        elements.urlExample.nextElementSibling.textContent = '';
+        elements.feedback.textContent = '';
         render(state, i18nInstance, elements);
         break;
 
